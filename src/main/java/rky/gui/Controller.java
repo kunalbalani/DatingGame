@@ -203,10 +203,7 @@ public class Controller extends GamePlatform
 
 	//calbacks from Player Board
 	public void updatePlayerMove()
-	{
-		
-		
-		
+	{	
 		if(player_board.getPlayer_guesses().size() > 0)
 		{
 			lastCandidate = player_board.getPlayer_guesses().get(player_board.getPlayer_guesses().size()-1);

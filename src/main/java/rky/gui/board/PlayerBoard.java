@@ -28,8 +28,8 @@ public class PlayerBoard extends Board {
 	private int noOfAttributes;
 	private int maxNoOfCandidates;
 
-	//private List<Candidate> player_guesses = new ArrayList<Candidate>();
-	//private Attribute selectedAttribute;
+	// private List<Candidate> player_guesses = new ArrayList<Candidate>();
+	// private Attribute selectedAttribute;
 
 	private Candidate ideal = new Candidate();
 	private int border = 10;
@@ -39,13 +39,13 @@ public class PlayerBoard extends Board {
 	private RigidRectPiece prev;
 	private int offset_for_strings = 0;
 
-	//public int scrolling_index = 0;
+	// public int scrolling_index = 0;
 
 	boolean isGameRunning = false;
 	boolean isGameOver = false;
 	public boolean isrefreshReqd = true;
 
-	//List<Double> score = new ArrayList<Double>();
+	// List<Double> score = new ArrayList<Double>();
 
 	Color colr = new Color(0, 255, 255);
 
@@ -57,7 +57,6 @@ public class PlayerBoard extends Board {
 
 	Controller applet;
 	boolean isScrollingEnabled = false;
-
 
 	public Player getPlayerName() {
 		return currentPlayer;
@@ -131,7 +130,7 @@ public class PlayerBoard extends Board {
 		this.currentPlayer.setScore(score);
 	}
 
-	public PlayerBoard(int x, int y, Controller applet,Player player) {
+	public PlayerBoard(int x, int y, Controller applet, Player player) {
 		this.offset_x = x;
 		this.offset_y = y;
 		this.applet = applet;
@@ -140,7 +139,6 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void init() {
-		
 
 	}
 
@@ -152,14 +150,15 @@ public class PlayerBoard extends Board {
 	}
 
 	@Override
-	public void pieceClicked(Piece p){
-		
-		if (p == submitButton){
+	public void pieceClicked(Piece p) {
 
-			if(currentPlayer.getPlayerName().contains("1") && applet.getMode() == Mode.Mutiplayer)
-				pushToHistory(ideal,false);
+		if (p == submitButton) {
+
+			if (currentPlayer.getPlayerName().contains("1")
+					&& applet.getMode() == Mode.Mutiplayer)
+				pushToHistory(ideal, false);
 			else
-				pushToHistory(ideal,true);
+				pushToHistory(ideal, true);
 
 			applet.updatePlayerMove();
 		}
@@ -172,7 +171,8 @@ public class PlayerBoard extends Board {
 	}
 
 	private void previousButtoClicker() {
-		if (currentPlayer.scrolling_index+show_max_guess < currentPlayer.getGuesses().size()) {
+		if (currentPlayer.scrolling_index + show_max_guess < currentPlayer
+				.getGuesses().size()) {
 			currentPlayer.scrolling_index++;
 			refreshAllGusses(false);
 		}
@@ -204,7 +204,7 @@ public class PlayerBoard extends Board {
 		for (int i = start_candidate; i >= 0; i--) {
 			Candidate c1 = currentPlayer.getGuesses().get(candidate_id++);
 			column = offset_x + width - border - padding * 25 - i
-			* (attribute_display_width + 40) - attribute_display_width;
+					* (attribute_display_width + 40) - attribute_display_width;
 
 			if (i == currentPlayer.getGuesses().size() - 1) {
 				offset_for_strings = column - 70;
@@ -240,24 +240,27 @@ public class PlayerBoard extends Board {
 	}
 
 	private void selectNextAttribute() {
-		int selectedIndex = ideal.getAttributes().indexOf(currentPlayer.selectedAttribute);
+		int selectedIndex = ideal.getAttributes().indexOf(
+				currentPlayer.selectedAttribute);
 		selectedIndex = (selectedIndex + 1) % ideal.getAttributes().size();
-		currentPlayer.selectedAttribute = ideal.getAttributes().get(selectedIndex);
+		currentPlayer.selectedAttribute = ideal.getAttributes().get(
+				selectedIndex);
 	}
 
 	private void selectPrevAttribute() {
-		int selectedIndex = ideal.getAttributes().indexOf(currentPlayer.selectedAttribute);
+		int selectedIndex = ideal.getAttributes().indexOf(
+				currentPlayer.selectedAttribute);
 		if (selectedIndex == 0) {
 			selectedIndex = ideal.getAttributes().size() - 1;
 		} else {
 			selectedIndex = (selectedIndex - 1);
 		}
-		currentPlayer.selectedAttribute = ideal.getAttributes().get(selectedIndex);
+		currentPlayer.selectedAttribute = ideal.getAttributes().get(
+				selectedIndex);
 	}
 
 	@Override
-	public void update() 
-	{
+	public void update() {
 		for (int i = 0; i < ideal.getAttributes().size(); i++) {
 			if (ideal.getAttributes().get(i) == currentPlayer.selectedAttribute) {
 				currentPlayer.selectedAttribute.setBorderColor(Color.red);
@@ -289,14 +292,15 @@ public class PlayerBoard extends Board {
 	@Override
 	public void drawOverlay(Graphics g) {
 		g.setFont(headerFont);
-		if(currentPlayer.getPlayerName().contains("1")){
+		if (currentPlayer.getPlayerName().contains("1")) {
 			g.setColor(Color.RED);
-		}else{
+		} else {
 			g.setColor(Color.BLUE);
 		}
-		g.drawString(currentPlayer.getPlayerName(), offset_x + width / 2 - 90, offset_y + 20);
+		g.drawString(currentPlayer.getPlayerName(), offset_x + width / 2 - 90,
+				offset_y + 20);
 
-		if(isGameRunning){
+		if (isGameRunning) {
 			g.setFont(font);
 			g.setColor(Color.black);
 			g.drawString("Submit", offset_x + 510 + 20, offset_y + 80 + 20);
@@ -316,14 +320,14 @@ public class PlayerBoard extends Board {
 				for (int i = 0; i < noOfAttributes; i++) {
 					g.setFont(font);
 					g.setColor(Color.black);
-					g.drawString("A" + (i + 1), offset_for_strings + 15, offset_y
-							+ i * (attribute_display_height + padding) + border
-							+ padding * 7);
+					g.drawString("A" + (i + 1), offset_for_strings + 15,
+							offset_y + i * (attribute_display_height + padding)
+									+ border + padding * 7);
 				}
 
 				int startIndex = 0;
 				int endIndex = currentPlayer.getGuesses().size();
-				if(currentPlayer.getGuesses().size()>5){
+				if (currentPlayer.getGuesses().size() > 5) {
 					startIndex = currentPlayer.scrolling_index;
 					endIndex = currentPlayer.scrolling_index + 5;
 				}
@@ -331,7 +335,8 @@ public class PlayerBoard extends Board {
 				for (int i = startIndex; i < endIndex; i++) {
 					g.setFont(font);
 					g.setColor(Color.black);
-					g.drawString("C" + (i + 1), offset_for_strings + (i-startIndex)
+					g.drawString("C" + (i + 1), offset_for_strings
+							+ (i - startIndex)
 							* (attribute_display_width + padding * 3 + border)
 							+ border + padding * 5, offset_y + 45);
 
@@ -340,24 +345,28 @@ public class PlayerBoard extends Board {
 				for (int i = startIndex; i < endIndex; i++) {
 					g.setFont(font);
 					g.setColor(Color.black);
-					if(i<currentPlayer.getScore().size()){
-						g.drawString(currentPlayer.getScore().get(i) + "", offset_for_strings + (i-startIndex)
-								* (attribute_display_width + padding * 3 + border)
-								+ border + padding * 5, offset_y + 420 + 15);
+					if (i < currentPlayer.getScore().size()) {
+						g.drawString(currentPlayer.getScore().get(i) + "",
+								offset_for_strings
+										+ (i - startIndex)
+										* (attribute_display_width + padding
+												* 3 + border) + border
+										+ padding * 5, offset_y + 420 + 15);
 					}
 
 				}
 
 				g.setFont(font);
 				g.setColor(Color.red);
-				g.drawString("Score:", offset_for_strings + 5, offset_y + 420 + 15);
+				g.drawString("Score:", offset_for_strings + 5,
+						offset_y + 420 + 15);
 				g.setColor(Color.black);
 			}
 		}
 
 	}
 
-	public void pushToHistory(Candidate c,boolean isRefreshRequired) {
+	public void pushToHistory(Candidate c, boolean isRefreshRequired) {
 
 		currentPlayer.getGuesses().add(c);
 		// clear borders
@@ -365,7 +374,7 @@ public class PlayerBoard extends Board {
 			c.getAttributes().get(i).setBorderColor(Color.black);
 		}
 
-		if(isRefreshRequired)
+		if (isRefreshRequired)
 			refreshAllGusses(true);
 
 		if (currentPlayer.getGuesses().size() > 5) {
@@ -380,27 +389,25 @@ public class PlayerBoard extends Board {
 
 		for (int i = 0; i < size_attributes; i++) {
 			Attribute p = new Attribute();
-			adjustGradient(p,applet.getGameLevel());
+			adjustGradient(p, applet.getGameLevel());
 			newCandidate.getAttributes().add(p);
 		}
 		return newCandidate;
 	}
 
-	private void adjustGradient(Attribute p, Level gameLevel) 
-	{
-		if(gameLevel == Level.Easy){
+	private void adjustGradient(Attribute p, Level gameLevel) {
+		if (gameLevel == Level.Easy) {
 			p.getMaterial().setStep(255);
-		}else if(gameLevel == Level.Medium){
+		} else if (gameLevel == Level.Medium) {
 			p.getMaterial().setStep(127);
-		}else if(gameLevel == Level.Hard){
+		} else if (gameLevel == Level.Hard) {
 			p.getMaterial().setStep(7);
 		}
 	}
 
-	private void showCandidate(Candidate candidate, int startPosition,boolean showGrid)
-	{
-		if (!showGrid) 
-		{
+	private void showCandidate(Candidate candidate, int startPosition,
+			boolean showGrid) {
+		if (!showGrid) {
 			for (int i = 0; i < candidate.getAttributes().size(); i++) {
 				Attribute p = candidate.getAttributes().get(i);
 				p.setBounds(startPosition, offset_y + i
@@ -417,7 +424,7 @@ public class PlayerBoard extends Board {
 
 				int x = startPosition;
 				int y = offset_y + i * (attribute_display_width + padding)
-				+ border + padding * 5;
+						+ border + padding * 5;
 
 				int width = attribute_display_width;
 				int height = attribute_display_height;
@@ -441,27 +448,26 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void start() {
-		
+
 		attribute_display_width = (int) (10 * 25 / noOfAttributes);
 		attribute_display_height = (int) (10 * 25 / noOfAttributes);
-		
+
 		setIdealCandidate();
 
 		// submit button
 		submitButton.setBounds(offset_x + 510, offset_y + 80, 100, 30);
 		submitButton.setColor(Color.red);
 		submitButton.delegate = applet;
-		applet.addPiece(submitButton);	
+		applet.addPiece(submitButton);
 
 		isGameRunning = true;
 	}
 
-	public void updateScore(double score,Player player) {
+	public void updateScore(double score, Player player) {
 		player.getScore().add(score);
 	}
 
-	public void setPlayer(Player player) 
-	{
+	public void setPlayer(Player player) {
 		currentPlayer = player;
 		refreshAllGusses(false);
 	}
