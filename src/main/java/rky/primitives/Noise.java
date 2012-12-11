@@ -59,7 +59,7 @@ public class Noise extends HidePrecision2Vec
 		ArrayList<Integer> indices = new ArrayList<Integer>(prefs.getDegree());
 		
 		for( int i = 0; i < prefs.getDegree(); i++ )
-			indices.add( i );
+			indices.add( 0 );
 		
 		Collections.shuffle( indices );
 		
@@ -71,7 +71,7 @@ public class Noise extends HidePrecision2Vec
 			int unaltered = prefs.get( indices.get(i) );
 			int alteration = (int)(unaltered * MAX_NOISE_MAGNITUDE * Math.random());
 			if( Math.random() > 0.5 ) alteration = -alteration;
-			noise.set( indices.get(i), alteration );
+			noise.set( indices.get(i), 0 );
 		}
 		
 		return noise;

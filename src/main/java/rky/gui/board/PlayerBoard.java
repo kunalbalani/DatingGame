@@ -154,6 +154,7 @@ public class PlayerBoard extends Board {
 	@Override
 	public void pieceClicked(Piece p) {
 		if (p == submitButton){
+			
 			pushToHistory(ideal);
 			applet.updatePlayerMove();
 		}
@@ -278,7 +279,6 @@ public class PlayerBoard extends Board {
 			}
 		}
 
-		refreshAllGusses(false);
 	}
 
 	@Override
@@ -448,6 +448,16 @@ public class PlayerBoard extends Board {
 
 	public void setPlayer(Player player) 
 	{
+		//removeCurrentPlayer();
 		currentPlayer = player;
+	}
+
+	private void removeCurrentPlayer() {
+		
+		for(int i=0; i<currentPlayer.getGuesses().size(); i++){
+			Candidate c = currentPlayer.getGuesses().get(i);
+			for(int j = 0 ; j< c.getAttributes().size();j++)
+			applet.removePiece(c.getAttributes().get(j));
+		}
 	}
 }
