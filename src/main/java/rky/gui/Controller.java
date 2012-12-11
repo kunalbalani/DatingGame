@@ -166,7 +166,8 @@ public class Controller extends GamePlatform
 			player2 = new Player("Player 2");
 			Dating.setNo_of_candidates(2*max_no_candidates);
 		}
-		
+		player_board.setNoOfAttributes(max_no_attributes);
+
 		Thread thread = new Thread(){
 			public void run()
 			{

@@ -80,13 +80,13 @@ public class NavigationBoard extends Board {
 		attributes.setEnabled(false);
 		applet.setLayout(null);
 		applet.add(attributes);
-		
+
 		Label can_label = new Label("#Candidates:");
 		can_label.setLocation(10,210);
 		can_label.setSize(100, 20);
 		can_label.setBackground(Color.white);
 		applet.add(can_label);
-		
+
 		candidates = new TextField(2);
 		candidates.setLocation(110,210);
 		candidates.setSize(60, 20);
@@ -105,33 +105,33 @@ public class NavigationBoard extends Board {
 
 		level_radio_button = new CheckboxGroup();
 		int startPosition = 80;
-		
+
 		FocusListener changeListener = new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
-		    	  Checkbox selectedBox = (Checkbox)e.getSource();
-		    	  if(selectedBox.getLabel().contains("Hard")){
-		    		  attributes.setText("15");
-		    		candidates.setText("20");
-		    	  }else if(selectedBox.getLabel().contains("Medium")){
-		    		  attributes.setText("10");
-		    		  candidates.setText("15");
-		    	  }else if(selectedBox.getLabel().contains("Easy")){
-		    		  attributes.setText("5");
-		    		  candidates.setText("10");
-		    	  }
+				Checkbox selectedBox = (Checkbox)e.getSource();
+				if(selectedBox.getLabel().contains("Hard")){
+					attributes.setText("15");
+					candidates.setText("20");
+				}else if(selectedBox.getLabel().contains("Medium")){
+					attributes.setText("10");
+					candidates.setText("15");
+				}else if(selectedBox.getLabel().contains("Easy")){
+					attributes.setText("5");
+					candidates.setText("10");
+				}
 			}
 
 			@Override
 			public void focusLost(FocusEvent e) {
 				// TODO Auto-generated method stub
-				
-			}
-		    };
 
-		
-		
-		    
+			}
+		};
+
+
+
+
 		for(int i=0;i<3;i++){
 
 			String level = "";
@@ -156,8 +156,8 @@ public class NavigationBoard extends Board {
 			startPosition+=20;
 		}
 	}
-	
-	
+
+
 
 	private void addModeCheckBox() 
 	{
@@ -256,12 +256,10 @@ public class NavigationBoard extends Board {
 	}
 
 	private void showError() {
-		// TODO Auto-generated method stub
 
 	}
 
 	private boolean isValid() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

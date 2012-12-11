@@ -52,8 +52,8 @@ public class PlayerBoard extends Board {
 	Font font = new Font("Helvetica", Font.BOLD, 16);
 	Font headerFont = new Font("Verdana", Font.BOLD, 20);
 
-	int attribute_display_width = 25;
-	int attribute_display_height = 25;
+	public int attribute_display_width = 25;
+	public int attribute_display_height = 25;
 
 	Controller applet;
 	boolean isScrollingEnabled = false;
