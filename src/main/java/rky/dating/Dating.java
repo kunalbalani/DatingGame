@@ -12,6 +12,7 @@ public class Dating
 	private static Player person;
 
 	public static Controller applet;
+	private static int no_of_candidates = 20;
 
 //	public static void main(String[] args)
 //	{
@@ -19,6 +20,14 @@ public class Dating
 //		runGame(N);
 //	}
 
+
+	public static int getNo_of_candidates() {
+		return no_of_candidates;
+	}
+
+	public static void setNo_of_candidates(int no_of_candidates) {
+		Dating.no_of_candidates = no_of_candidates;
+	}
 
 	public static Player getMatchmaker() {
 		return matchmaker;
@@ -60,7 +69,7 @@ public class Dating
 
 			//------------------------------------------------------
 			StringBuilder randomCandidatesMsg = new StringBuilder();
-			for( int i = 0; i < 20; i++ )
+			for( int i = 0; i < no_of_candidates; i++ )
 			{
 				Candidate c = Candidate.generateRandomCandidate( n );
 				if( !c.isValid() )
@@ -69,7 +78,7 @@ public class Dating
 				double score = c.getScore( p );
 
 				String comma;
-				if(i < 19){
+				if(i < no_of_candidates-1){
 					comma = ",";
 				}else{
 					comma = "";
@@ -82,7 +91,7 @@ public class Dating
 
 
 			//------------------------------------------------------
-			for( ; turnNumber < 20; turnNumber++ )
+			for( ; turnNumber < no_of_candidates; turnNumber++ )
 			{
 				if( maxScore == 1 )
 					break;
@@ -125,7 +134,7 @@ public class Dating
 			if( e.getResponsiblePlayer() == getPlayer(Role.M) )
 			{
 				finalScore = "-1.0";
-				turnsUsed  = "20";
+				turnsUsed  = no_of_candidates+"";
 			}
 			else  // if P is responsible
 			{

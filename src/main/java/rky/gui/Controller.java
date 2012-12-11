@@ -181,7 +181,7 @@ public class Controller extends GamePlatform
 	}
 
 	public void setMode(Mode mode){
-
+		this.mode = mode;
 	}
 
 	public void restartGame(){

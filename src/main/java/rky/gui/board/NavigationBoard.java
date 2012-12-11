@@ -42,6 +42,7 @@ public class NavigationBoard extends Board {
 		startButton.setBounds(150,250, 130, 40);
 		Image startImage = applet.intializeImage("startButton.png");
 		startButton.setImage(startImage);
+		startButton.delegate = applet;
 		applet.addPiece(startButton);
 
 
@@ -96,6 +97,9 @@ public class NavigationBoard extends Board {
 			Checkbox leve = new Checkbox(level,level_radio_button,false);
 			leve.setLocation(100, startPosition);
 			leve.setSize(120, 20);
+			if(i ==0){
+				leve.setState(true);
+			}
 			leve.setBackground(Color.white);
 			applet.add(leve);
 
@@ -115,6 +119,7 @@ public class NavigationBoard extends Board {
 		Checkbox mode1 = new Checkbox("Single Player",mode_radio_button,false);
 		mode1.setLocation(100, 20);
 		mode1.setSize(120, 20);
+		mode1.setState(true);
 		mode1.setBackground(Color.white);
 		applet.add(mode1);
 
@@ -126,17 +131,31 @@ public class NavigationBoard extends Board {
 
 	}
 
-	public boolean action(Event evt, Object
-			whichAction)
+	public void setAppletState()
 	{
-		Checkbox currentCheckbox=(Checkbox)evt.target;
+		
+		String s = attributes.getText().trim();
+        try{
+        	int no_of_attributes = Integer.parseInt(s);
+        	
+        	if(no_of_attributes < 15 && no_of_attributes >5){
+        		applet.setMax_no_attributes(no_of_attributes);
+        	}
+        }catch (Exception e) {}
+        
+		setValue(mode_radio_button.getSelectedCheckbox());
+		setValue(level_radio_button.getSelectedCheckbox());
+	}
+
+
+	private void setValue(Checkbox currentCheckbox) {
 		boolean checkboxState = currentCheckbox.getState();
-		if (currentCheckbox.getLabel() == "Single Player")
+		if (currentCheckbox.getLabel().contains("Single"))
 			if (checkboxState)
 			{
 				applet.setMode(Mode.SinglePlayer);
 			}
-		if (currentCheckbox.getLabel() == "Two Players")
+		if (currentCheckbox.getLabel().contains("Two"))
 			if (checkboxState)
 			{
 				applet.setMode(Mode.Mutiplayer);
@@ -155,10 +174,8 @@ public class NavigationBoard extends Board {
 			if (checkboxState)
 			{
 				applet.setGameLevel(Level.Easy);
-			}	
-		return true;
+			}			
 	}
-
 
 	@Override
 	public void stop() {
@@ -177,24 +194,27 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void pieceClicked(Piece p) {
+		setAppletState();
+		if(isValid())
+			applet.startGame();
+		else{
+			showError();
+		}
+	}
 
+	private void showError() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private boolean isValid() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	@Override
 	public void start() {
+		//TODO disable all radio button
 		sw.start();
 	}
-
-	class MyActionListener  implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
-            String s = attributes.getText();
-            try{
-            	int no_of_attributes = Integer.parseInt(s);
-            	
-            	if(no_of_attributes < 15 && no_of_attributes >5){
-            		applet.setMax_no_attributes(no_of_attributes);
-            	}
-            }catch (Exception e) {}
-        } 
-    }
 }
