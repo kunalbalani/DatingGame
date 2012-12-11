@@ -74,7 +74,7 @@ public class ScoreBoard extends Board {
 	private void addNewBar(Line l,double score,Color color){
 
 		int barX = 500;
-		int barY = l.start.y - 60;
+		int barY = l.start.y - 60-yOffset;
 
 		score += 1; //convert score from 0-2
 

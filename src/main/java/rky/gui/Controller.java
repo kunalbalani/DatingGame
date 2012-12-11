@@ -57,17 +57,17 @@ public class Controller extends GamePlatform
 		addPiece(v_border);
 
 		RigidRectPiece h_border = new RigidRectPiece();
-		h_border.setBounds(300,260,640,3);
+		h_border.setBounds(300,200,640,3);
 		addPiece(h_border);
 
-		score_board = new ScoreBoard(300,0,this);
+		score_board = new ScoreBoard(300,-50,this);
 		score_board.init();
 
 		nav_board = new NavigationBoard(this);
 		nav_board.init();
 
 		player1 = new Player("Player 1");
-		player_board = new PlayerBoard(300,270,this,player1);
+		player_board = new PlayerBoard(300,210,this,player1);
 		player_board.setMaxNoOfCandidates(max_no_candidates);
 		player_board.setNoOfAttributes(max_no_attributes);
 		player_board.init();

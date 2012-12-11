@@ -9,8 +9,11 @@ import java.awt.Color;
 import java.awt.Event;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import rky.simpleGamePlatform.Piece;
 import rky.simpleGamePlatform.RigidRectPiece;
@@ -21,7 +24,7 @@ public class PlayerBoard extends Board {
 	private int offset_x, offset_y;
 
 	private final int width = 640, height = 480;
-	private final int show_max_guess = 5;
+	private int show_max_guess = 5;
 
 	private Player currentPlayer;
 
@@ -38,6 +41,7 @@ public class PlayerBoard extends Board {
 	private RigidRectPiece next;
 	private RigidRectPiece prev;
 	private int offset_for_strings = 0;
+	public int level_offset = 0;
 
 	// public int scrolling_index = 0;
 
@@ -57,6 +61,9 @@ public class PlayerBoard extends Board {
 
 	Controller applet;
 	boolean isScrollingEnabled = false;
+	
+	List<RigidRectPiece> att_images = new ArrayList<RigidRectPiece>();
+	Set<RigidRectPiece> pieceadded = new TreeSet<RigidRectPiece>();
 
 	public Player getPlayerName() {
 		return currentPlayer;
@@ -139,7 +146,14 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void init() {
-
+		//init all images add add them
+		for(int i = 1 ; i <= 15;i++){
+			RigidRectPiece p = new RigidRectPiece();
+			p.setImage(applet.intializeImage(i+""));
+			att_images.add(p);
+		}
+		
+		
 	}
 
 	private void setIdealCandidate() {
@@ -272,7 +286,7 @@ public class PlayerBoard extends Board {
 		if (isScrollingEnabled) {
 			if (next == null) {
 				next = new RigidRectPiece();
-				next.setBounds(offset_x + 45, offset_y + 450, 60, 20);
+				next.setBounds(offset_x + 45, offset_y + 450+level_offset, 60, 20);
 				next.setColor(Color.gray);
 				next.delegate = applet;
 				applet.addPiece(next);
@@ -280,7 +294,7 @@ public class PlayerBoard extends Board {
 
 			if (prev == null) {
 				prev = new RigidRectPiece();
-				prev.setBounds(offset_x + 310, offset_y + 450, 60, 20);
+				prev.setBounds(offset_x + 310, offset_y + 450+level_offset, 60, 20);
 				prev.setColor(Color.gray);
 				prev.delegate = applet;
 				applet.addPiece(prev);
@@ -308,21 +322,32 @@ public class PlayerBoard extends Board {
 			if (isScrollingEnabled) {
 				g.setFont(font);
 				g.setColor(Color.black);
-				g.drawString("Prev", offset_x + 45 + 10, offset_y + 450 + 15);
+				g.drawString("Prev", offset_x + 45 + 10, offset_y + 450 + 15+level_offset);
 
 				g.setFont(font);
 				g.setColor(Color.black);
-				g.drawString("Next", offset_x + 310 + 10, offset_y + 450 + 15);
+				g.drawString("Next", offset_x + 310 + 10, offset_y + 450 + 15+level_offset);
 			}
 
 			if (offset_for_strings != 0) {
 
 				for (int i = 0; i < noOfAttributes; i++) {
-					g.setFont(font);
-					g.setColor(Color.black);
-					g.drawString("A" + (i + 1), offset_for_strings + 15,
-							offset_y + i * (attribute_display_height + padding)
-									+ border + padding * 7);
+					//g.setFont(font);
+					//g.setColor(Color.black);
+					if(!pieceadded.contains(att_images.get(i))){
+						applet.addPiece(att_images.get(i));
+						pieceadded.add(att_images.get(i));
+						att_images.get(i).setImage(applet.intializeImage((i+1)+".png"));
+					}
+					if(applet.getGameLevel() == Level.Easy){
+						att_images.get(i).setBounds(offset_for_strings + 15,1.3*offset_y +(i) * (attribute_display_height + padding), attribute_display_height-20, attribute_display_height-20);
+					}else{
+						att_images.get(i).setBounds(offset_for_strings + 15,1.3*offset_y +(i) * (attribute_display_height + padding), attribute_display_height, attribute_display_height);
+					}
+//					
+					//g.drawString("A" + (i + 1), offset_for_strings + 15,
+//							offset_y + i * (attribute_display_height + padding)
+//									+ border + padding * 7);
 				}
 
 				int startIndex = 0;
@@ -351,7 +376,7 @@ public class PlayerBoard extends Board {
 										+ (i - startIndex)
 										* (attribute_display_width + padding
 												* 3 + border) + border
-										+ padding * 5, offset_y + 420 + 15);
+										+ padding * 5, offset_y + 420 + 15+level_offset);
 					}
 
 				}
@@ -359,7 +384,7 @@ public class PlayerBoard extends Board {
 				g.setFont(font);
 				g.setColor(Color.red);
 				g.drawString("Score:", offset_for_strings + 5,
-						offset_y + 420 + 15);
+						offset_y + 420 + 15+level_offset);
 				g.setColor(Color.black);
 			}
 		}
@@ -459,7 +484,13 @@ public class PlayerBoard extends Board {
 		submitButton.setColor(Color.red);
 		submitButton.delegate = applet;
 		applet.addPiece(submitButton);
-
+		
+		if(applet.getGameLevel() == Level.Hard)
+			level_offset = 40;
+		
+		if(applet.getGameLevel() == Level.Easy){
+			show_max_guess = 4;
+		}
 		isGameRunning = true;
 	}
 
@@ -472,4 +503,5 @@ public class PlayerBoard extends Board {
 		refreshAllGusses(false);
 	}
 
+	
 }

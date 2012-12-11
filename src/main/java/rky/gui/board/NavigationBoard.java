@@ -54,7 +54,7 @@ public class NavigationBoard extends Board {
 
 
 		hand = new RigidRectPiece();
-		hand.setBounds(10,250, 130, 40);
+		hand.setBounds(10,250, 90, 30);
 		hand.setImage(applet.intializeImage("pointer-finger-white.png"));
 		hand.setBorderColor(Color.white);
 		applet.addPiece(hand);
@@ -239,13 +239,12 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void update() {
-		hand.setBounds(10+Math.sin(time++)*5,250, 130, 60);
+		hand.setBounds(20+Math.sin(time++)*5,270, 100, 45);
 	}	
 
 	@Override
 	public void pieceClicked(Piece p) {
 		if(p == startButton){
-			//TODO disable start button
 			setAppletState();
 			if(isValid())
 				applet.startGame();
