@@ -24,10 +24,10 @@ public class PlayerBoard extends Board {
 	private final int show_max_guess = 5;
 
 	private Player currentPlayer;
-	
+
 	private int noOfAttributes;
 	private int maxNoOfCandidates;
-	
+
 	//private List<Candidate> player_guesses = new ArrayList<Candidate>();
 	//private Attribute selectedAttribute;
 
@@ -43,6 +43,7 @@ public class PlayerBoard extends Board {
 
 	boolean isGameRunning = false;
 	boolean isGameOver = false;
+	public boolean isrefreshReqd = true;
 
 	//List<Double> score = new ArrayList<Double>();
 
@@ -57,7 +58,7 @@ public class PlayerBoard extends Board {
 	Controller applet;
 	boolean isScrollingEnabled = false;
 
-	
+
 	public Player getPlayerName() {
 		return currentPlayer;
 	}
@@ -97,7 +98,7 @@ public class PlayerBoard extends Board {
 	public void setSelectedAttribute(Attribute selectedAttribute) {
 		this.currentPlayer.setSelectedAttribute(selectedAttribute);
 	}
-	
+
 	public int getOffset_x() {
 		return offset_x;
 	}
@@ -113,7 +114,7 @@ public class PlayerBoard extends Board {
 	public void setOffset_y(int offset_y) {
 		this.offset_y = offset_y;
 	}
-	
+
 	public int getOffset_for_strings() {
 		return offset_for_strings;
 	}
@@ -152,10 +153,15 @@ public class PlayerBoard extends Board {
 	}
 
 	@Override
-	public void pieceClicked(Piece p) {
+	public void pieceClicked(Piece p){
+		
 		if (p == submitButton){
-			
-			pushToHistory(ideal);
+
+			if(currentPlayer.getPlayerName().contains("1") && applet.getMode() == Mode.Mutiplayer)
+				pushToHistory(ideal,false);
+			else
+				pushToHistory(ideal,true);
+
 			applet.updatePlayerMove();
 		}
 		if (p == next) {
@@ -284,7 +290,11 @@ public class PlayerBoard extends Board {
 	@Override
 	public void drawOverlay(Graphics g) {
 		g.setFont(headerFont);
-		g.setColor(Color.BLUE);
+		if(currentPlayer.getPlayerName().contains("1")){
+			g.setColor(Color.RED);
+		}else{
+			g.setColor(Color.BLUE);
+		}
 		g.drawString(currentPlayer.getPlayerName(), offset_x + width / 2 - 90, offset_y + 20);
 
 		if(isGameRunning){
@@ -348,7 +358,7 @@ public class PlayerBoard extends Board {
 
 	}
 
-	public void pushToHistory(Candidate c) {
+	public void pushToHistory(Candidate c,boolean isRefreshRequired) {
 
 		currentPlayer.getGuesses().add(c);
 		// clear borders
@@ -356,7 +366,8 @@ public class PlayerBoard extends Board {
 			c.getAttributes().get(i).setBorderColor(Color.black);
 		}
 
-		refreshAllGusses(true);
+		if(isRefreshRequired)
+			refreshAllGusses(true);
 
 		if (currentPlayer.getGuesses().size() > 5) {
 			isScrollingEnabled = true;
@@ -407,8 +418,8 @@ public class PlayerBoard extends Board {
 
 				int x = startPosition;
 				int y = offset_y + i * (attribute_display_width + padding)
-							+ border + padding * 5;
-				
+				+ border + padding * 5;
+
 				int width = attribute_display_width;
 				int height = attribute_display_height;
 
@@ -438,26 +449,18 @@ public class PlayerBoard extends Board {
 		submitButton.setColor(Color.red);
 		submitButton.delegate = applet;
 		applet.addPiece(submitButton);	
-		
+
 		isGameRunning = true;
 	}
 
-	public void updateScore(double score) {
-		this.currentPlayer.getScore().add(score);
+	public void updateScore(double score,Player player) {
+		player.getScore().add(score);
 	}
 
 	public void setPlayer(Player player) 
 	{
-		//removeCurrentPlayer();
 		currentPlayer = player;
+		refreshAllGusses(false);
 	}
 
-	private void removeCurrentPlayer() {
-		
-		for(int i=0; i<currentPlayer.getGuesses().size(); i++){
-			Candidate c = currentPlayer.getGuesses().get(i);
-			for(int j = 0 ; j< c.getAttributes().size();j++)
-			applet.removePiece(c.getAttributes().get(j));
-		}
-	}
 }

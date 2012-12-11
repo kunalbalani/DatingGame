@@ -204,13 +204,16 @@ public class Controller extends GamePlatform
 	//calbacks from Player Board
 	public void updatePlayerMove()
 	{
+		
+		
+		
 		if(player_board.getPlayer_guesses().size() > 0)
 		{
 			lastCandidate = player_board.getPlayer_guesses().get(player_board.getPlayer_guesses().size()-1);
 		}
-		
 		if(mode == Mode.Mutiplayer)
 			switchTurn();
+		
 	}
 
 	public rky.primitives.Candidate getCandidateFromM()
@@ -242,12 +245,14 @@ public class Controller extends GamePlatform
 	
 	public void updateScore(double score){
 		if(currentTurn == player1){
+			player_board.updateScore(score,player2);
 			score_board.updateScore(score,Color.blue);
-			player_board.updateScore(score);
+
 		}
 		else{
+			player_board.updateScore(score,player1);
 			score_board.updateScore(score,Color.red);
-			player_board.updateScore(score);
+
 		}
 	}
 	
@@ -260,7 +265,6 @@ public class Controller extends GamePlatform
 			currentTurn = player1;
 		}
 		player_board.setPlayer(currentTurn);
-
 	}
 
 
