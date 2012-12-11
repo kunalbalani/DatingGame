@@ -3,6 +3,7 @@ package rky.gui.board;
 import rky.gui.Attribute;
 import rky.gui.Candidate;
 import rky.gui.Controller;
+import rky.gui.Player;
 
 import java.awt.Color;
 import java.awt.Event;
@@ -22,12 +23,13 @@ public class PlayerBoard extends Board {
 	private final int width = 640, height = 480;
 	private final int show_max_guess = 5;
 
-	private String playerName = "Player";
+	private Player currentPlayer;
 	
 	private int noOfAttributes;
 	private int maxNoOfCandidates;
-	private List<Candidate> player_guesses = new ArrayList<Candidate>();
-	private Attribute selectedAttribute;
+	
+	//private List<Candidate> player_guesses = new ArrayList<Candidate>();
+	//private Attribute selectedAttribute;
 
 	private Candidate ideal = new Candidate();
 	private int border = 10;
@@ -37,12 +39,12 @@ public class PlayerBoard extends Board {
 	private RigidRectPiece prev;
 	private int offset_for_strings = 0;
 
-	private int scrolling_index = 0;
+	//public int scrolling_index = 0;
 
 	boolean isGameRunning = false;
 	boolean isGameOver = false;
 
-	List<Double> score = new ArrayList<Double>();
+	//List<Double> score = new ArrayList<Double>();
 
 	Color colr = new Color(0, 255, 255);
 
@@ -55,12 +57,13 @@ public class PlayerBoard extends Board {
 	Controller applet;
 	boolean isScrollingEnabled = false;
 
-	public String getPlayerName() {
-		return playerName;
+	
+	public Player getPlayerName() {
+		return currentPlayer;
 	}
 
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
+	public void setPlayerName(Player player) {
+		this.currentPlayer = player;
 	}
 
 	public int getNoOfAttributes() {
@@ -80,19 +83,19 @@ public class PlayerBoard extends Board {
 	}
 
 	public List<Candidate> getPlayer_guesses() {
-		return player_guesses;
+		return currentPlayer.getGuesses();
 	}
 
 	public void setPlayer_guesses(List<Candidate> player_guesses) {
-		this.player_guesses = player_guesses;
+		this.currentPlayer.setGuesses(player_guesses);
 	}
 
 	public Attribute getSelectedAttribute() {
-		return selectedAttribute;
+		return currentPlayer.getSelectedAttribute();
 	}
 
 	public void setSelectedAttribute(Attribute selectedAttribute) {
-		this.selectedAttribute = selectedAttribute;
+		this.currentPlayer.setSelectedAttribute(selectedAttribute);
 	}
 	
 	public int getOffset_x() {
@@ -110,11 +113,28 @@ public class PlayerBoard extends Board {
 	public void setOffset_y(int offset_y) {
 		this.offset_y = offset_y;
 	}
+	
+	public int getOffset_for_strings() {
+		return offset_for_strings;
+	}
 
-	public PlayerBoard(int x, int y, Controller applet) {
+	public void setOffset_for_strings(int offset_for_strings) {
+		this.offset_for_strings = offset_for_strings;
+	}
+
+	public List<Double> getScore() {
+		return currentPlayer.getScore();
+	}
+
+	public void setScore(List<Double> score) {
+		this.currentPlayer.setScore(score);
+	}
+
+	public PlayerBoard(int x, int y, Controller applet,Player player) {
 		this.offset_x = x;
 		this.offset_y = y;
 		this.applet = applet;
+		this.currentPlayer = player;
 	}
 
 	@Override
@@ -128,7 +148,7 @@ public class PlayerBoard extends Board {
 		ideal = createNewCandidate(noOfAttributes);
 		showCandidate(ideal, offset_x + width - border - padding * 15
 				- attribute_display_width, false);
-		selectedAttribute = ideal.getAttributes().get(0);
+		currentPlayer.selectedAttribute = ideal.getAttributes().get(0);
 	}
 
 	@Override
@@ -146,16 +166,16 @@ public class PlayerBoard extends Board {
 	}
 
 	private void previousButtoClicker() {
-		if (scrolling_index+show_max_guess < player_guesses.size()) {
-			scrolling_index++;
+		if (currentPlayer.scrolling_index+show_max_guess < currentPlayer.getGuesses().size()) {
+			currentPlayer.scrolling_index++;
 			refreshAllGusses(false);
 		}
 	}
 
 	private void nextButtonClicked() {
 
-		if (scrolling_index > 0) {
-			scrolling_index--;
+		if (currentPlayer.scrolling_index > 0) {
+			currentPlayer.scrolling_index--;
 			refreshAllGusses(false);
 		}
 
@@ -165,22 +185,22 @@ public class PlayerBoard extends Board {
 
 		int candidate_id = 0;
 		int column = 0;
-		int start_candidate = player_guesses.size() - 1;
+		int start_candidate = currentPlayer.getGuesses().size() - 1;
 
-		if (player_guesses.size() > show_max_guess) {
+		if (currentPlayer.getGuesses().size() > show_max_guess) {
 
 			if (isAutoScroll)
-				scrolling_index++;
-			candidate_id = scrolling_index;
+				currentPlayer.scrolling_index++;
+			candidate_id = currentPlayer.scrolling_index;
 			start_candidate = show_max_guess - 1;
 		}
 
 		for (int i = start_candidate; i >= 0; i--) {
-			Candidate c1 = player_guesses.get(candidate_id++);
+			Candidate c1 = currentPlayer.getGuesses().get(candidate_id++);
 			column = offset_x + width - border - padding * 25 - i
 			* (attribute_display_width + 40) - attribute_display_width;
 
-			if (i == player_guesses.size() - 1) {
+			if (i == currentPlayer.getGuesses().size() - 1) {
 				offset_for_strings = column - 70;
 			}
 			showCandidate(c1, column, true);
@@ -206,35 +226,35 @@ public class PlayerBoard extends Board {
 	}
 
 	private void increaseGraditent() {
-		selectedAttribute.getMaterial().increaseGradient();
+		currentPlayer.selectedAttribute.getMaterial().increaseGradient();
 	}
 
 	private void reduceGradient() {
-		selectedAttribute.getMaterial().reduceGradient();
+		currentPlayer.selectedAttribute.getMaterial().reduceGradient();
 	}
 
 	private void selectNextAttribute() {
-		int selectedIndex = ideal.getAttributes().indexOf(selectedAttribute);
+		int selectedIndex = ideal.getAttributes().indexOf(currentPlayer.selectedAttribute);
 		selectedIndex = (selectedIndex + 1) % ideal.getAttributes().size();
-		selectedAttribute = ideal.getAttributes().get(selectedIndex);
+		currentPlayer.selectedAttribute = ideal.getAttributes().get(selectedIndex);
 	}
 
 	private void selectPrevAttribute() {
-		int selectedIndex = ideal.getAttributes().indexOf(selectedAttribute);
+		int selectedIndex = ideal.getAttributes().indexOf(currentPlayer.selectedAttribute);
 		if (selectedIndex == 0) {
 			selectedIndex = ideal.getAttributes().size() - 1;
 		} else {
 			selectedIndex = (selectedIndex - 1);
 		}
-		selectedAttribute = ideal.getAttributes().get(selectedIndex);
+		currentPlayer.selectedAttribute = ideal.getAttributes().get(selectedIndex);
 	}
 
 	@Override
 	public void update() 
 	{
 		for (int i = 0; i < ideal.getAttributes().size(); i++) {
-			if (ideal.getAttributes().get(i) == selectedAttribute) {
-				selectedAttribute.setBorderColor(Color.red);
+			if (ideal.getAttributes().get(i) == currentPlayer.selectedAttribute) {
+				currentPlayer.selectedAttribute.setBorderColor(Color.red);
 			} else {
 				ideal.getAttributes().get(i).setBorderColor(Color.black);
 			}
@@ -258,13 +278,14 @@ public class PlayerBoard extends Board {
 			}
 		}
 
+		refreshAllGusses(false);
 	}
 
 	@Override
 	public void drawOverlay(Graphics g) {
 		g.setFont(headerFont);
 		g.setColor(Color.BLUE);
-		g.drawString(playerName, offset_x + width / 2 - 90, offset_y + 20);
+		g.drawString(currentPlayer.getPlayerName(), offset_x + width / 2 - 90, offset_y + 20);
 
 		if(isGameRunning){
 			g.setFont(font);
@@ -292,10 +313,10 @@ public class PlayerBoard extends Board {
 				}
 
 				int startIndex = 0;
-				int endIndex = player_guesses.size();
-				if(player_guesses.size()>5){
-					startIndex = scrolling_index;
-					endIndex = scrolling_index + 5;
+				int endIndex = currentPlayer.getGuesses().size();
+				if(currentPlayer.getGuesses().size()>5){
+					startIndex = currentPlayer.scrolling_index;
+					endIndex = currentPlayer.scrolling_index + 5;
 				}
 
 				for (int i = startIndex; i < endIndex; i++) {
@@ -310,8 +331,8 @@ public class PlayerBoard extends Board {
 				for (int i = startIndex; i < endIndex; i++) {
 					g.setFont(font);
 					g.setColor(Color.black);
-					if(i<score.size()){
-						g.drawString(score.get(i) + "", offset_for_strings + (i-startIndex)
+					if(i<currentPlayer.getScore().size()){
+						g.drawString(currentPlayer.getScore().get(i) + "", offset_for_strings + (i-startIndex)
 								* (attribute_display_width + padding * 3 + border)
 								+ border + padding * 5, offset_y + 420 + 15);
 					}
@@ -329,7 +350,7 @@ public class PlayerBoard extends Board {
 
 	public void pushToHistory(Candidate c) {
 
-		player_guesses.add(c);
+		currentPlayer.getGuesses().add(c);
 		// clear borders
 		for (int i = 0; i < c.getAttributes().size(); i++) {
 			c.getAttributes().get(i).setBorderColor(Color.black);
@@ -337,7 +358,7 @@ public class PlayerBoard extends Board {
 
 		refreshAllGusses(true);
 
-		if (player_guesses.size() > 5) {
+		if (currentPlayer.getGuesses().size() > 5) {
 			isScrollingEnabled = true;
 		}
 		setIdealCandidate();
@@ -366,9 +387,10 @@ public class PlayerBoard extends Board {
 		}
 	}
 
-	private void showCandidate(Candidate candidate, int startPosition,
-			boolean showGrid) {
-		if (!showGrid) {
+	private void showCandidate(Candidate candidate, int startPosition,boolean showGrid)
+	{
+		if (!showGrid) 
+		{
 			for (int i = 0; i < candidate.getAttributes().size(); i++) {
 				Attribute p = candidate.getAttributes().get(i);
 				p.setBounds(startPosition, offset_y + i
@@ -385,7 +407,8 @@ public class PlayerBoard extends Board {
 
 				int x = startPosition;
 				int y = offset_y + i * (attribute_display_width + padding)
-				+ border + padding * 5;
+							+ border + padding * 5;
+				
 				int width = attribute_display_width;
 				int height = attribute_display_height;
 
@@ -420,7 +443,11 @@ public class PlayerBoard extends Board {
 	}
 
 	public void updateScore(double score) {
-		this.score.add(score);
+		this.currentPlayer.getScore().add(score);
 	}
 
+	public void setPlayer(Player player) 
+	{
+		currentPlayer = player;
+	}
 }

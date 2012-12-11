@@ -133,16 +133,16 @@ public class NavigationBoard extends Board {
 
 	public void setAppletState()
 	{
-		
+
 		String s = attributes.getText().trim();
-        try{
-        	int no_of_attributes = Integer.parseInt(s);
-        	
-        	if(no_of_attributes < 15 && no_of_attributes >5){
-        		applet.setMax_no_attributes(no_of_attributes);
-        	}
-        }catch (Exception e) {}
-        
+		try{
+			int no_of_attributes = Integer.parseInt(s);
+
+			if(no_of_attributes < 15 && no_of_attributes >5){
+				applet.setMax_no_attributes(no_of_attributes);
+			}
+		}catch (Exception e) {}
+
 		setValue(mode_radio_button.getSelectedCheckbox());
 		setValue(level_radio_button.getSelectedCheckbox());
 	}
@@ -194,17 +194,20 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void pieceClicked(Piece p) {
-		setAppletState();
-		if(isValid())
-			applet.startGame();
-		else{
-			showError();
+		if(p == startButton){
+			//TODO disable start button
+			setAppletState();
+			if(isValid())
+				applet.startGame();
+			else{
+				showError();
+			}
 		}
 	}
 
 	private void showError() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private boolean isValid() {

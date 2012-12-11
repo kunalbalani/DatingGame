@@ -15,7 +15,6 @@ import rky.gui.board.Mode;
 import rky.gui.board.NavigationBoard;
 import rky.gui.board.PlayerBoard;
 import rky.gui.board.ScoreBoard;
-import rky.player.Player;
 import rky.primitives.Candidate;
 import rky.simpleGamePlatform.GamePlatform;
 import rky.simpleGamePlatform.Piece;
@@ -37,7 +36,6 @@ public class Controller extends GamePlatform
 	Level gameLevel;
 
 	Player currentTurn;
-
 	Player player1,player2;
 
 	rky.gui.Candidate lastCandidate;
@@ -68,7 +66,8 @@ public class Controller extends GamePlatform
 		nav_board = new NavigationBoard(this);
 		nav_board.init();
 
-		player_board = new PlayerBoard(300,270,this);
+		player1 = new Player("Player 1");
+		player_board = new PlayerBoard(300,270,this,player1);
 		player_board.setMaxNoOfCandidates(max_no_candidates);
 		player_board.setNoOfAttributes(max_no_attributes);
 		player_board.init();
@@ -164,6 +163,7 @@ public class Controller extends GamePlatform
 		if(mode == Mode.SinglePlayer){
 			Dating.setNo_of_candidates(max_no_candidates);
 		}else {
+			player2 = new Player("Player 2");
 			Dating.setNo_of_candidates(2*max_no_candidates);
 		}
 
@@ -196,18 +196,21 @@ public class Controller extends GamePlatform
 		this.mode = mode;
 	}
 
-	public void restartGame(){
-		stopGame();
-		startGame();
-	}
+//	public void restartGame(){
+//		stopGame();
+//		startGame();
+//	}
 
 	//calbacks from Player Board
 	public void updatePlayerMove()
 	{
-		if(player_board.getPlayer_guesses().size() > 0){
-			lastCandidate = player_board.getPlayer_guesses().
-			get(player_board.getPlayer_guesses().size()-1);
+		if(player_board.getPlayer_guesses().size() > 0)
+		{
+			lastCandidate = player_board.getPlayer_guesses().get(player_board.getPlayer_guesses().size()-1);
 		}
+		
+		if(mode == Mode.Mutiplayer)
+			switchTurn();
 	}
 
 	public rky.primitives.Candidate getCandidateFromM()
@@ -247,6 +250,19 @@ public class Controller extends GamePlatform
 			player_board.updateScore(score);
 		}
 	}
+	
+	public void switchTurn()
+	{
+		if(currentTurn == player1)
+		{
+			currentTurn = player2;
+		}else{
+			currentTurn = player1;
+		}
+		player_board.setPlayer(currentTurn);
+
+	}
+
 
 	public Level getGameLevel() {
 		return gameLevel;
