@@ -166,7 +166,7 @@ public class Controller extends GamePlatform
 			player2 = new Player("Player 2");
 			Dating.setNo_of_candidates(2*max_no_candidates);
 		}
-
+		
 		Thread thread = new Thread(){
 			public void run()
 			{
@@ -184,7 +184,7 @@ public class Controller extends GamePlatform
 
 	public void stopGame()
 	{
-
+		
 	}
 
 	public void setPlayers(Player one, Player two)
@@ -245,14 +245,17 @@ public class Controller extends GamePlatform
 	
 	public void updateScore(double score){
 		if(currentTurn == player1){
-			player_board.updateScore(score,player2);
+			if(mode == Mode.Mutiplayer)
+				player_board.updateScore(score,player2);
+			else
+				player_board.updateScore(score,player1);
+
 			score_board.updateScore(score,Color.blue);
 
 		}
 		else{
 			player_board.updateScore(score,player1);
 			score_board.updateScore(score,Color.red);
-
 		}
 	}
 	
@@ -268,11 +271,13 @@ public class Controller extends GamePlatform
 	}
 
 
-	public Level getGameLevel() {
+	public Level getGameLevel()
+	{
 		return gameLevel;
 	}
 
-	public void setGameLevel(Level gameLevel) {
+	public void setGameLevel(Level gameLevel) 
+	{
 		this.gameLevel = gameLevel;
 	}
 

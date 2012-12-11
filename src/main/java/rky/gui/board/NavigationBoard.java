@@ -10,6 +10,11 @@ import java.awt.Label;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import rky.gui.Controller;
 import rky.simpleGamePlatform.Piece;
@@ -28,6 +33,8 @@ public class NavigationBoard extends Board {
 	CheckboxGroup level_radio_button;
 
 	TextField attributes;
+	TextField candidates;
+
 
 	public NavigationBoard(Controller applet)
 	{
@@ -39,7 +46,7 @@ public class NavigationBoard extends Board {
 	{
 		//add a start button
 		startButton = new RigidRectPiece();
-		startButton.setBounds(150,250, 130, 40);
+		startButton.setBounds(150,260, 130, 45);
 		Image startImage = applet.intializeImage("startButton.png");
 		startButton.setImage(startImage);
 		startButton.delegate = applet;
@@ -68,9 +75,24 @@ public class NavigationBoard extends Board {
 		attributes = new TextField(2);
 		attributes.setLocation(110,180);
 		attributes.setSize(60, 20);
+		attributes.setText("15");
 		attributes.setBackground(Color.white);
+		attributes.setEnabled(false);
 		applet.setLayout(null);
 		applet.add(attributes);
+		
+		Label can_label = new Label("#Candidates:");
+		can_label.setLocation(10,210);
+		can_label.setSize(100, 20);
+		can_label.setBackground(Color.white);
+		applet.add(can_label);
+		
+		candidates = new TextField(2);
+		candidates.setLocation(110,210);
+		candidates.setSize(60, 20);
+		candidates.setText("20");
+		candidates.setBackground(Color.white);
+		applet.add(candidates);
 	}
 
 	private void addLevelOptions() 
@@ -83,6 +105,33 @@ public class NavigationBoard extends Board {
 
 		level_radio_button = new CheckboxGroup();
 		int startPosition = 80;
+		
+		FocusListener changeListener = new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+		    	  Checkbox selectedBox = (Checkbox)e.getSource();
+		    	  if(selectedBox.getLabel().contains("Hard")){
+		    		  attributes.setText("15");
+		    		candidates.setText("20");
+		    	  }else if(selectedBox.getLabel().contains("Medium")){
+		    		  attributes.setText("10");
+		    		  candidates.setText("15");
+		    	  }else if(selectedBox.getLabel().contains("Easy")){
+		    		  attributes.setText("5");
+		    		  candidates.setText("10");
+		    	  }
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		    };
+
+		
+		
+		    
 		for(int i=0;i<3;i++){
 
 			String level = "";
@@ -100,12 +149,15 @@ public class NavigationBoard extends Board {
 			if(i ==0){
 				leve.setState(true);
 			}
+			leve.addFocusListener(changeListener);
 			leve.setBackground(Color.white);
 			applet.add(leve);
 
 			startPosition+=20;
 		}
 	}
+	
+	
 
 	private void addModeCheckBox() 
 	{
@@ -134,13 +186,11 @@ public class NavigationBoard extends Board {
 	public void setAppletState()
 	{
 
-		String s = attributes.getText().trim();
+		String s = attributes.getText();
 		try{
 			int no_of_attributes = Integer.parseInt(s);
+			applet.setMax_no_attributes(no_of_attributes);
 
-			if(no_of_attributes < 15 && no_of_attributes >5){
-				applet.setMax_no_attributes(no_of_attributes);
-			}
 		}catch (Exception e) {}
 
 		setValue(mode_radio_button.getSelectedCheckbox());

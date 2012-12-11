@@ -140,8 +140,7 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void init() {
-		attribute_display_width = (int) (10 * 25 / noOfAttributes);
-		attribute_display_height = (int) (10 * 25 / noOfAttributes);
+		
 
 	}
 
@@ -442,6 +441,10 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void start() {
+		
+		attribute_display_width = (int) (10 * 25 / noOfAttributes);
+		attribute_display_height = (int) (10 * 25 / noOfAttributes);
+		
 		setIdealCandidate();
 
 		// submit button
