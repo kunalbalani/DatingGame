@@ -73,8 +73,6 @@ public class Controller extends GamePlatform
 		player_board.setNoOfAttributes(max_no_attributes);
 		player_board.init();
 
-
-
 	}
 
 	public Image intializeImage(String imgName)
@@ -89,11 +87,11 @@ public class Controller extends GamePlatform
 			String path = base.toString();
 			System.out.println(path);
 
-			//			String folders[] = path.split("/");
-			//			path = "";
-			//			for(int i = 0 ; i<folders.length-1; i++){
-			//				path +=(folders[i]+"/");
-			//			}
+			//	String folders[] = path.split("/");
+			//	path = "";
+			//	for(int i = 0 ; i<folders.length-1; i++){
+			//		path +=(folders[i]+"/");
+			//	}
 			path += "rky/resources/Images/";
 			System.out.println(path);
 			base = new URL(path);
@@ -204,16 +202,19 @@ public class Controller extends GamePlatform
 	}
 
 	//calbacks from Player Board
-	public void updatePlayerMove(){
+	public void updatePlayerMove()
+	{
 		if(player_board.getPlayer_guesses().size() > 0){
 			lastCandidate = player_board.getPlayer_guesses().
 			get(player_board.getPlayer_guesses().size()-1);
 		}
 	}
 
-	public rky.primitives.Candidate getCandidateFromM(){
+	public rky.primitives.Candidate getCandidateFromM()
+	{
 
-		while(lastCandidate == null){
+		while(lastCandidate == null)
+		{
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -245,7 +246,6 @@ public class Controller extends GamePlatform
 			score_board.updateScore(score,Color.red);
 			player_board.updateScore(score);
 		}
-
 	}
 
 	public Level getGameLevel() {

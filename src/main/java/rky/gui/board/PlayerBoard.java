@@ -18,10 +18,12 @@ public class PlayerBoard extends Board {
 
 	// start co-odinates of PlayerBoard
 	private int offset_x, offset_y;
+
 	private final int width = 640, height = 480;
 	private final int show_max_guess = 5;
 
-	private String playerName;
+	private String playerName = "Player";
+	
 	private int noOfAttributes;
 	private int maxNoOfCandidates;
 	private List<Candidate> player_guesses = new ArrayList<Candidate>();
@@ -91,6 +93,22 @@ public class PlayerBoard extends Board {
 
 	public void setSelectedAttribute(Attribute selectedAttribute) {
 		this.selectedAttribute = selectedAttribute;
+	}
+	
+	public int getOffset_x() {
+		return offset_x;
+	}
+
+	public void setOffset_x(int offset_x) {
+		this.offset_x = offset_x;
+	}
+
+	public int getOffset_y() {
+		return offset_y;
+	}
+
+	public void setOffset_y(int offset_y) {
+		this.offset_y = offset_y;
 	}
 
 	public PlayerBoard(int x, int y, Controller applet) {
@@ -212,7 +230,8 @@ public class PlayerBoard extends Board {
 	}
 
 	@Override
-	public void update() {
+	public void update() 
+	{
 		for (int i = 0; i < ideal.getAttributes().size(); i++) {
 			if (ideal.getAttributes().get(i) == selectedAttribute) {
 				selectedAttribute.setBorderColor(Color.red);
@@ -245,7 +264,7 @@ public class PlayerBoard extends Board {
 	public void drawOverlay(Graphics g) {
 		g.setFont(headerFont);
 		g.setColor(Color.BLUE);
-		g.drawString("Player 1", offset_x + width / 2 - 90, offset_y + 20);
+		g.drawString(playerName, offset_x + width / 2 - 90, offset_y + 20);
 
 		if(isGameRunning){
 			g.setFont(font);
