@@ -37,7 +37,10 @@ public class PlayerBoard extends Board {
 
 	private int scrolling_index = 0;
 
-	double score[] = { 0.12, 0.14, -0.34, 0.54, 1, 0.19, 0.24, -0.4, 0.599};
+	boolean isGameRunning = false;
+	boolean isGameOver = false;
+
+	List<Double> score = new ArrayList<Double>();
 
 	Color colr = new Color(0, 255, 255);
 
@@ -100,14 +103,6 @@ public class PlayerBoard extends Board {
 	public void init() {
 		attribute_display_width = (int) (10 * 25 / noOfAttributes);
 		attribute_display_height = (int) (10 * 25 / noOfAttributes);
-
-		setIdealCandidate();
-
-		// submit button
-		submitButton.setBounds(offset_x + 510, offset_y + 80, 100, 30);
-		submitButton.setColor(Color.red);
-		submitButton.delegate = applet;
-		applet.addPiece(submitButton);
 
 	}
 
@@ -252,59 +247,63 @@ public class PlayerBoard extends Board {
 		g.setColor(Color.BLUE);
 		g.drawString("Player 1", offset_x + width / 2 - 90, offset_y + 20);
 
-		g.setFont(font);
-		g.setColor(Color.black);
-		g.drawString("Submit", offset_x + 510 + 20, offset_y + 80 + 20);
-
-		if (isScrollingEnabled) {
+		if(isGameRunning){
 			g.setFont(font);
 			g.setColor(Color.black);
-			g.drawString("Prev", offset_x + 45 + 10, offset_y + 450 + 15);
+			g.drawString("Submit", offset_x + 510 + 20, offset_y + 80 + 20);
 
-			g.setFont(font);
-			g.setColor(Color.black);
-			g.drawString("Next", offset_x + 310 + 10, offset_y + 450 + 15);
-		}
-
-		if (offset_for_strings != 0) {
-
-			for (int i = 0; i < noOfAttributes; i++) {
+			if (isScrollingEnabled) {
 				g.setFont(font);
 				g.setColor(Color.black);
-				g.drawString("A" + (i + 1), offset_for_strings + 15, offset_y
-						+ i * (attribute_display_height + padding) + border
-						+ padding * 7);
-			}
+				g.drawString("Prev", offset_x + 45 + 10, offset_y + 450 + 15);
 
-			int startIndex = 0;
-			int endIndex = player_guesses.size();
-			if(player_guesses.size()>5){
-				startIndex = scrolling_index;
-				endIndex = scrolling_index + 5;
-			}
-
-			for (int i = startIndex; i < endIndex; i++) {
 				g.setFont(font);
 				g.setColor(Color.black);
-				g.drawString("C" + (i + 1), offset_for_strings + (i-startIndex)
-						* (attribute_display_width + padding * 3 + border)
-						+ border + padding * 5, offset_y + 45);
-
+				g.drawString("Next", offset_x + 310 + 10, offset_y + 450 + 15);
 			}
 
-			for (int i = startIndex; i < endIndex; i++) {
+			if (offset_for_strings != 0) {
+
+				for (int i = 0; i < noOfAttributes; i++) {
+					g.setFont(font);
+					g.setColor(Color.black);
+					g.drawString("A" + (i + 1), offset_for_strings + 15, offset_y
+							+ i * (attribute_display_height + padding) + border
+							+ padding * 7);
+				}
+
+				int startIndex = 0;
+				int endIndex = player_guesses.size();
+				if(player_guesses.size()>5){
+					startIndex = scrolling_index;
+					endIndex = scrolling_index + 5;
+				}
+
+				for (int i = startIndex; i < endIndex; i++) {
+					g.setFont(font);
+					g.setColor(Color.black);
+					g.drawString("C" + (i + 1), offset_for_strings + (i-startIndex)
+							* (attribute_display_width + padding * 3 + border)
+							+ border + padding * 5, offset_y + 45);
+
+				}
+
+				for (int i = startIndex; i < endIndex; i++) {
+					g.setFont(font);
+					g.setColor(Color.black);
+					if(i<score.size()){
+						g.drawString(score.get(i) + "", offset_for_strings + (i-startIndex)
+								* (attribute_display_width + padding * 3 + border)
+								+ border + padding * 5, offset_y + 420 + 15);
+					}
+
+				}
+
 				g.setFont(font);
+				g.setColor(Color.red);
+				g.drawString("Score:", offset_for_strings + 5, offset_y + 420 + 15);
 				g.setColor(Color.black);
-				g.drawString(score[i] + "", offset_for_strings + (i-startIndex)
-						* (attribute_display_width + padding * 3 + border)
-						+ border + padding * 5, offset_y + 420 + 15);
-
 			}
-
-			g.setFont(font);
-			g.setColor(Color.red);
-			g.drawString("Score:", offset_for_strings + 5, offset_y + 420 + 15);
-			g.setColor(Color.black);
 		}
 
 	}
@@ -331,9 +330,21 @@ public class PlayerBoard extends Board {
 
 		for (int i = 0; i < size_attributes; i++) {
 			Attribute p = new Attribute();
+			adjustGradient(p,applet.getGameLevel());
 			newCandidate.getAttributes().add(p);
 		}
 		return newCandidate;
+	}
+
+	private void adjustGradient(Attribute p, Level gameLevel) 
+	{
+		if(gameLevel == Level.Easy){
+			p.getMaterial().setStep(255);
+		}else if(gameLevel == Level.Medium){
+			p.getMaterial().setStep(127);
+		}else if(gameLevel == Level.Hard){
+			p.getMaterial().setStep(7);
+		}
 	}
 
 	private void showCandidate(Candidate candidate, int startPosition,
@@ -378,8 +389,19 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		setIdealCandidate();
+
+		// submit button
+		submitButton.setBounds(offset_x + 510, offset_y + 80, 100, 30);
+		submitButton.setColor(Color.red);
+		submitButton.delegate = applet;
+		applet.addPiece(submitButton);	
 		
+		isGameRunning = true;
+	}
+
+	public void updateScore(double score) {
+		this.score.add(score);
 	}
 
 }

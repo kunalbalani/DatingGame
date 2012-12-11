@@ -2,12 +2,14 @@
 package rky.gui;
 
 
+import java.awt.Color;
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.net.URL;
 
+import rky.dating.Dating;
 import rky.gui.board.Level;
 import rky.gui.board.Mode;
 import rky.gui.board.NavigationBoard;
@@ -20,6 +22,7 @@ import rky.simpleGamePlatform.Piece;
 import rky.simpleGamePlatform.RigidRectPiece;
 
 //start applet with size 940 X 780
+@SuppressWarnings("serial")
 public class Controller extends GamePlatform
 {		
 	int width,height;
@@ -32,8 +35,8 @@ public class Controller extends GamePlatform
 	int max_no_attributes = 10;
 	Mode mode;
 	Level gameLevel;
-	
-	
+
+	Player currentTurn;
 
 	Player player1,player2;
 
@@ -70,15 +73,7 @@ public class Controller extends GamePlatform
 		player_board.setNoOfAttributes(max_no_attributes);
 		player_board.init();
 
-		//		Dating.applet = this;
-		//		
-		//		Thread thread = new Thread(){
-		//		    public void run(){
-		//				Dating.runGame(max_no_attributes);
-		//		    }
-		//		  };
-		//		 
-		//		  thread.start();
+
 
 	}
 
@@ -94,11 +89,11 @@ public class Controller extends GamePlatform
 			String path = base.toString();
 			System.out.println(path);
 
-//			String folders[] = path.split("/");
-//			path = "";
-//			for(int i = 0 ; i<folders.length-1; i++){
-//				path +=(folders[i]+"/");
-//			}
+			//			String folders[] = path.split("/");
+			//			path = "";
+			//			for(int i = 0 ; i<folders.length-1; i++){
+			//				path +=(folders[i]+"/");
+			//			}
 			path += "rky/resources/Images/";
 			System.out.println(path);
 			base = new URL(path);
@@ -165,6 +160,25 @@ public class Controller extends GamePlatform
 	public void startGame()
 	{
 		isGameRunning = true;
+
+		Dating.applet = this;
+
+		if(mode == Mode.SinglePlayer){
+			Dating.setNo_of_candidates(max_no_candidates);
+		}else {
+			Dating.setNo_of_candidates(2*max_no_candidates);
+		}
+
+		Thread thread = new Thread(){
+			public void run()
+			{
+				Dating.runGame(max_no_attributes);
+			}
+		};
+
+		thread.start();
+
+		currentTurn = player1;
 		player_board.start();
 		score_board.start();
 		nav_board.start();
@@ -217,11 +231,23 @@ public class Controller extends GamePlatform
 		rky.primitives.Candidate candidate = new Candidate( player_board.getNoOfAttributes() );
 
 		for( int i = 0; i < player_board.getNoOfAttributes(); i++ )
-			candidate.set(i, lastCandidate2.getAttributes().get(i).getValue());
+			candidate.set(i,lastCandidate2.getAttributes().get(i).getValue());
 
 		return candidate;
 	}
 	
+	public void updateScore(double score){
+		if(currentTurn == player1){
+			score_board.updateScore(score,Color.blue);
+			player_board.updateScore(score);
+		}
+		else{
+			score_board.updateScore(score,Color.red);
+			player_board.updateScore(score);
+		}
+
+	}
+
 	public Level getGameLevel() {
 		return gameLevel;
 	}

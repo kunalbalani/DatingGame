@@ -119,6 +119,8 @@ public class Dating
 				}
 
 				double score = c.getScore( p, noise );              // noisy score
+				if(applet != null)
+					applet.updateScore(score);
 				informPlayer( Player.Role.M, String.format("%.2f", score) );   // note that format() rounds the float
 				maxScore = Math.max( maxScore, c.getScore( p ) );   // actual score
 

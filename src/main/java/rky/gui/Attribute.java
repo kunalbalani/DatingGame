@@ -14,7 +14,9 @@ public class Attribute extends RigidRectPiece
 	
 	public int getValue()
 	{
-		return material.red;
+		int returnValue = 0;
+		returnValue = (int) material.red/255*100;
+		return returnValue;
 	}
 		
 	public class Material{
