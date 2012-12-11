@@ -2,22 +2,19 @@
 package rky.gui;
 
 
-import rky.gui.board.Board;
-import rky.gui.board.NavigationBoard;
-import rky.gui.board.PlayerBoard;
-import rky.gui.board.ScoreBoard;
-
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.net.URL;
 
-import rky.dating.Dating;
-
+import rky.gui.board.Level;
+import rky.gui.board.Mode;
+import rky.gui.board.NavigationBoard;
+import rky.gui.board.PlayerBoard;
+import rky.gui.board.ScoreBoard;
 import rky.player.Player;
 import rky.primitives.Candidate;
-
 import rky.simpleGamePlatform.GamePlatform;
 import rky.simpleGamePlatform.Piece;
 import rky.simpleGamePlatform.RigidRectPiece;
@@ -34,9 +31,11 @@ public class Controller extends GamePlatform
 	int max_no_candidates = 20;
 	int max_no_attributes = 10;
 	Mode mode;
-	Player player1,player2;
+	Level gameLevel;
+	
+	
 
-	enum Mode{SinglePlayer,Mutiplayer};
+	Player player1,player2;
 
 	rky.gui.Candidate lastCandidate;
 
@@ -221,6 +220,18 @@ public class Controller extends GamePlatform
 			candidate.set(i, lastCandidate2.getAttributes().get(i).getValue());
 
 		return candidate;
+	}
+	
+	public Level getGameLevel() {
+		return gameLevel;
+	}
+
+	public void setGameLevel(Level gameLevel) {
+		this.gameLevel = gameLevel;
+	}
+
+	public Mode getMode() {
+		return mode;
 	}
 }
 

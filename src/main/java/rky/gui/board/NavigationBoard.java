@@ -3,10 +3,13 @@ package rky.gui.board;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Label;
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import rky.gui.Controller;
 import rky.simpleGamePlatform.Piece;
@@ -23,9 +26,9 @@ public class NavigationBoard extends Board {
 
 	CheckboxGroup mode_radio_button;
 	CheckboxGroup level_radio_button;
-	
+
 	TextField attributes;
-	
+
 	public NavigationBoard(Controller applet)
 	{
 		this.applet = applet;
@@ -60,7 +63,7 @@ public class NavigationBoard extends Board {
 		attributes_label.setSize(100, 20);
 		attributes_label.setBackground(Color.white);
 		applet.add(attributes_label);
-		
+
 		attributes = new TextField(2);
 		attributes.setLocation(110,180);
 		attributes.setSize(60, 20);
@@ -80,7 +83,7 @@ public class NavigationBoard extends Board {
 		level_radio_button = new CheckboxGroup();
 		int startPosition = 80;
 		for(int i=0;i<3;i++){
-			
+
 			String level = "";
 			if(i ==0){
 				level = "Hard";
@@ -89,13 +92,13 @@ public class NavigationBoard extends Board {
 			}else if(i ==2){
 				level = "Easy";
 			}
-			
+
 			Checkbox leve = new Checkbox(level,level_radio_button,false);
 			leve.setLocation(100, startPosition);
 			leve.setSize(120, 20);
 			leve.setBackground(Color.white);
 			applet.add(leve);
-			
+
 			startPosition+=20;
 		}
 	}
@@ -121,7 +124,40 @@ public class NavigationBoard extends Board {
 		mode2.setBackground(Color.white);
 		applet.add(mode2);		
 
-	}		
+	}
+
+	public boolean action(Event evt, Object
+			whichAction)
+	{
+		Checkbox currentCheckbox=(Checkbox)evt.target;
+		boolean checkboxState = currentCheckbox.getState();
+		if (currentCheckbox.getLabel() == "Single Player")
+			if (checkboxState)
+			{
+				applet.setMode(Mode.SinglePlayer);
+			}
+		if (currentCheckbox.getLabel() == "Two Players")
+			if (checkboxState)
+			{
+				applet.setMode(Mode.Mutiplayer);
+			}
+		if (currentCheckbox.getLabel() == "Hard")
+			if (checkboxState)
+			{
+				applet.setGameLevel(Level.Hard);
+			}
+		if (currentCheckbox.getLabel() == "Medium")
+			if (checkboxState)
+			{
+				applet.setGameLevel(Level.Medium);
+			}
+		if (currentCheckbox.getLabel() == "Easy")
+			if (checkboxState)
+			{
+				applet.setGameLevel(Level.Easy);
+			}	
+		return true;
+	}
 
 
 	@Override
@@ -149,4 +185,16 @@ public class NavigationBoard extends Board {
 		sw.start();
 	}
 
+	class MyActionListener  implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            String s = attributes.getText();
+            try{
+            	int no_of_attributes = Integer.parseInt(s);
+            	
+            	if(no_of_attributes < 15 && no_of_attributes >5){
+            		applet.setMax_no_attributes(no_of_attributes);
+            	}
+            }catch (Exception e) {}
+        } 
+    }
 }
