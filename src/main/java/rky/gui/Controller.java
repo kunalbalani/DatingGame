@@ -30,7 +30,7 @@ public class Controller extends GamePlatform
 	NavigationBoard nav_board;
 	PlayerBoard player_board;
 
-	int max_no_candidates = 20;
+	public int max_no_candidates = 20;
 	int max_no_attributes = 10;
 	Mode mode;
 	Level gameLevel;
@@ -73,6 +73,7 @@ public class Controller extends GamePlatform
 		player_board.init();
 
 	}
+
 
 	public Image intializeImage(String imgName)
 	{
@@ -185,11 +186,17 @@ public class Controller extends GamePlatform
 
 	public void stopGame()
 	{
-		
+		isGameOver = true;
+		player_board.stop();
+		score_board.stop();
+		nav_board.stop();
 	}
 
-	public void setPlayers(Player one, Player two)
-	{
+	public double getMaxScore(Player player){
+
+	}
+
+	public int getTurnsLeft(Player player){
 
 	}
 
@@ -197,10 +204,10 @@ public class Controller extends GamePlatform
 		this.mode = mode;
 	}
 
-//	public void restartGame(){
-//		stopGame();
-//		startGame();
-//	}
+	//	public void restartGame(){
+	//		stopGame();
+	//		startGame();
+	//	}
 
 	//calbacks from Player Board
 	public void updatePlayerMove()
@@ -211,7 +218,7 @@ public class Controller extends GamePlatform
 		}
 		if(mode == Mode.Mutiplayer)
 			switchTurn();
-		
+
 	}
 
 	public rky.primitives.Candidate getCandidateFromM()
@@ -240,7 +247,7 @@ public class Controller extends GamePlatform
 
 		return candidate;
 	}
-	
+
 	public void updateScore(double score){
 		if(currentTurn == player1){
 			if(mode == Mode.Mutiplayer)
@@ -256,7 +263,7 @@ public class Controller extends GamePlatform
 			score_board.updateScore(score,Color.red);
 		}
 	}
-	
+
 	public void switchTurn()
 	{
 		if(currentTurn == player1)

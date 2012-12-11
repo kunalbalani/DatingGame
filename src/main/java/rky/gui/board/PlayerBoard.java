@@ -61,7 +61,7 @@ public class PlayerBoard extends Board {
 
 	Controller applet;
 	boolean isScrollingEnabled = false;
-	
+
 	List<RigidRectPiece> att_images = new ArrayList<RigidRectPiece>();
 	Set<RigidRectPiece> pieceadded = new TreeSet<RigidRectPiece>();
 
@@ -152,8 +152,8 @@ public class PlayerBoard extends Board {
 			p.setImage(applet.intializeImage(i+""));
 			att_images.add(p);
 		}
-		
-		
+
+
 	}
 
 	private void setIdealCandidate() {
@@ -166,21 +166,23 @@ public class PlayerBoard extends Board {
 	@Override
 	public void pieceClicked(Piece p) {
 
-		if (p == submitButton) {
+		if(!isGameOver){
+			if (p == submitButton) {
 
-			if (currentPlayer.getPlayerName().contains("1")
-					&& applet.getMode() == Mode.Mutiplayer)
-				pushToHistory(ideal, false);
-			else
-				pushToHistory(ideal, true);
+				if (currentPlayer.getPlayerName().contains("1")
+						&& applet.getMode() == Mode.Mutiplayer)
+					pushToHistory(ideal, false);
+				else
+					pushToHistory(ideal, true);
 
-			applet.updatePlayerMove();
-		}
-		if (p == next) {
-			nextButtonClicked();
-		}
-		if (p == prev) {
-			previousButtoClicker();
+				applet.updatePlayerMove();
+			}
+			if (p == next) {
+				nextButtonClicked();
+			}
+			if (p == prev) {
+				previousButtoClicker();
+			}
 		}
 	}
 
@@ -218,7 +220,7 @@ public class PlayerBoard extends Board {
 		for (int i = start_candidate; i >= 0; i--) {
 			Candidate c1 = currentPlayer.getGuesses().get(candidate_id++);
 			column = offset_x + width - border - padding * 25 - i
-					* (attribute_display_width + 40) - attribute_display_width;
+			* (attribute_display_width + 40) - attribute_display_width;
 
 			if (i == currentPlayer.getGuesses().size() - 1) {
 				offset_for_strings = column - 70;
@@ -344,10 +346,10 @@ public class PlayerBoard extends Board {
 					}else{
 						att_images.get(i).setBounds(offset_for_strings + 15,1.3*offset_y +(i) * (attribute_display_height + padding), attribute_display_height, attribute_display_height);
 					}
-//					
+					//					
 					//g.drawString("A" + (i + 1), offset_for_strings + 15,
-//							offset_y + i * (attribute_display_height + padding)
-//									+ border + padding * 7);
+					//							offset_y + i * (attribute_display_height + padding)
+					//									+ border + padding * 7);
 				}
 
 				int startIndex = 0;
@@ -373,9 +375,9 @@ public class PlayerBoard extends Board {
 					if (i < currentPlayer.getScore().size()) {
 						g.drawString(currentPlayer.getScore().get(i) + "",
 								offset_for_strings
-										+ (i - startIndex)
-										* (attribute_display_width + padding
-												* 3 + border) + border
+								+ (i - startIndex)
+								* (attribute_display_width + padding
+										* 3 + border) + border
 										+ padding * 5, offset_y + 420 + 15+level_offset);
 					}
 
@@ -449,7 +451,7 @@ public class PlayerBoard extends Board {
 
 				int x = startPosition;
 				int y = offset_y + i * (attribute_display_width + padding)
-						+ border + padding * 5;
+				+ border + padding * 5;
 
 				int width = attribute_display_width;
 				int height = attribute_display_height;
@@ -468,7 +470,7 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void stop() {
-
+		isGameOver = true;
 	}
 
 	@Override
@@ -484,13 +486,15 @@ public class PlayerBoard extends Board {
 		submitButton.setColor(Color.red);
 		submitButton.delegate = applet;
 		applet.addPiece(submitButton);
-		
+
 		if(applet.getGameLevel() == Level.Hard)
 			level_offset = 40;
-		
+
 		if(applet.getGameLevel() == Level.Easy){
 			show_max_guess = 4;
 		}
+
+
 		isGameRunning = true;
 	}
 
@@ -503,5 +507,5 @@ public class PlayerBoard extends Board {
 		refreshAllGusses(false);
 	}
 
-	
+
 }

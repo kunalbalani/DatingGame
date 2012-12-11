@@ -32,8 +32,12 @@ public class NavigationBoard extends Board {
 	CheckboxGroup mode_radio_button;
 	CheckboxGroup level_radio_button;
 
+
 	TextField attributes;
 	TextField candidates;
+
+	boolean isGameRunning = false;
+	boolean isGameOver = false;
 
 
 	public NavigationBoard(Controller applet)
@@ -192,6 +196,13 @@ public class NavigationBoard extends Board {
 			applet.setMax_no_attributes(no_of_attributes);
 
 		}catch (Exception e) {}
+		
+		try{
+			s = candidates.getText();
+			int no_of_cand = Integer.parseInt(s);
+			applet.max_no_candidates = no_of_cand;
+
+		}catch (Exception e) {}
 
 		setValue(mode_radio_button.getSelectedCheckbox());
 		setValue(level_radio_button.getSelectedCheckbox());
@@ -229,7 +240,7 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void stop() {
-
+		isGameOver = true;
 	}
 
 	@Override
@@ -244,13 +255,17 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void pieceClicked(Piece p) {
-		if(p == startButton){
-			setAppletState();
-			if(isValid())
-				applet.startGame();
-			else{
-				showError();
+		if(!isGameRunning){
+			if(p == startButton){
+				setAppletState();
+				if(isValid())
+					applet.startGame();
+				else{
+					showError();
+				}
 			}
+		}else{
+			applet.stopGame();
 		}
 	}
 
@@ -266,5 +281,13 @@ public class NavigationBoard extends Board {
 	public void start() {
 		//TODO disable all radio button
 		sw.start();
+
+		applet.removePiece(hand);
+		startButton.setBounds(180,260, 80, 80);
+		startButton.setBorderColor(Color.white);
+		startButton.setImage(applet.intializeImage("restart_button.png"));
+
+		candidates.setEnabled(false);
+		isGameRunning = true;
 	}
 }
