@@ -118,6 +118,7 @@ public class PlayerBoard extends Board {
 		selectedAttribute = ideal.getAttributes().get(0);
 	}
 
+	@Override
 	public void pieceClicked(Piece p) {
 		if (p == submitButton){
 			pushToHistory(ideal);
@@ -215,6 +216,7 @@ public class PlayerBoard extends Board {
 		selectedAttribute = ideal.getAttributes().get(selectedIndex);
 	}
 
+	@Override
 	public void update() {
 		for (int i = 0; i < ideal.getAttributes().size(); i++) {
 			if (ideal.getAttributes().get(i) == selectedAttribute) {
@@ -372,6 +374,12 @@ public class PlayerBoard extends Board {
 	@Override
 	public void stop() {
 
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -13,11 +13,11 @@ public class Dating
 
 	public static Controller applet;
 
-	public static void main(String[] args)
-	{
-		int N = 10;
-		runGame(N);
-	}
+//	public static void main(String[] args)
+//	{
+//		int N = 10;
+//		runGame(N);
+//	}
 
 
 	public static Player getMatchmaker() {

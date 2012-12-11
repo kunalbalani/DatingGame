@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import rky.simpleGamePlatform.Piece;
 import rky.simpleGamePlatform.RigidRectPiece;
 
 
@@ -34,6 +35,7 @@ public class ScoreBoard extends Board {
 		this.applet = applet;
 	}
 
+	@Override
 	public void update() 
 	{
 		for(RigidRectPiece p :bars){			
@@ -115,6 +117,17 @@ public class ScoreBoard extends Board {
 
 	@Override
 	public void init() {
+		
+	}
+
+	@Override
+	public void pieceClicked(Piece p) {
+		
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
 		
 	}
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.009" errors="0" skipped="0" tests="1" name="rky.dating.AppTest">
+<testsuite failures="0" time="0.012" errors="0" skipped="0" tests="1" name="rky.dating.AppTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries"/>
@@ -16,13 +16,13 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="unknown"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/Users/kunal/Desktop/rky-dating"/>
+    <property name="user.dir" value="/Users/kunal/Desktop/DatingGame"/>
     <property name="java.runtime.version" value="1.6.0_35-b10-428-11M3811"/>
     <property name="java.awt.graphicsenv" value="apple.awt.CGraphicsEnvironment"/>
-    <property name="basedir" value="/Users/kunal/Desktop/rky-dating"/>
+    <property name="basedir" value="/Users/kunal/Desktop/DatingGame"/>
     <property name="java.endorsed.dirs" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed"/>
     <property name="os.arch" value="x86_64"/>
-    <property name="surefire.real.class.path" value="/Users/kunal/Desktop/rky-dating/target/surefire/surefirebooter7892502249603497785.jar"/>
+    <property name="surefire.real.class.path" value="/Users/kunal/Desktop/DatingGame/target/surefire/surefirebooter5789817202343822890.jar"/>
     <property name="java.io.tmpdir" value="/var/folders/kn/dj1hs2zn3g7bmk43kml03qcm0000gn/T/"/>
     <property name="line.separator" value="
 "/>
@@ -30,7 +30,7 @@
     <property name="os.name" value="Mac OS X"/>
     <property name="sun.jnu.encoding" value="MacRoman"/>
     <property name="java.library.path" value=".:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java"/>
-    <property name="surefire.test.class.path" value="/Users/kunal/Desktop/rky-dating/target/test-classes:/Users/kunal/Desktop/rky-dating/target/classes:/Users/kunal/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:"/>
+    <property name="surefire.test.class.path" value="/Users/kunal/Desktop/DatingGame/target/test-classes:/Users/kunal/Desktop/DatingGame/target/classes:/Users/kunal/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="50.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -42,11 +42,11 @@
     <property name="java.specification.version" value="1.6"/>
     <property name="file.encoding" value="MacRoman"/>
     <property name="user.name" value="kunal"/>
-    <property name="java.class.path" value="/Users/kunal/Desktop/rky-dating/target/test-classes:/Users/kunal/Desktop/rky-dating/target/classes:/Users/kunal/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:"/>
+    <property name="java.class.path" value="/Users/kunal/Desktop/DatingGame/target/test-classes:/Users/kunal/Desktop/DatingGame/target/classes:/Users/kunal/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:"/>
     <property name="java.vm.specification.version" value="1.0"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"/>
-    <property name="sun.java.command" value="/Users/kunal/Desktop/rky-dating/target/surefire/surefirebooter7892502249603497785.jar /Users/kunal/Desktop/rky-dating/target/surefire/surefire7040301180182743323tmp /Users/kunal/Desktop/rky-dating/target/surefire/surefire5196175545946260171tmp"/>
+    <property name="sun.java.command" value="/Users/kunal/Desktop/DatingGame/target/surefire/surefirebooter5789817202343822890.jar /Users/kunal/Desktop/DatingGame/target/surefire/surefire1668386103507318207tmp /Users/kunal/Desktop/DatingGame/target/surefire/surefire7990779941361114221tmp"/>
     <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
     <property name="user.language" value="en"/>
     <property name="awt.toolkit" value="apple.awt.CToolkit"/>
