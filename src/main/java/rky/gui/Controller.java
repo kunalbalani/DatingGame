@@ -36,7 +36,7 @@ public class Controller extends GamePlatform
 	Level gameLevel;
 
 	Player currentTurn;
-	Player player1,player2;
+	public Player player1,player2;
 
 	rky.gui.Candidate lastCandidate;
 
@@ -193,12 +193,17 @@ public class Controller extends GamePlatform
 	}
 
 	public double getMaxScore(Player player){
-
+		
+		double retVal = -1;
+		for(int i = 0 ; i <player.getScore().size();i++){
+			if(player.getScore().get(i)> retVal)
+				retVal = player.getScore().get(i);
+		}
+		
+		return retVal;
 	}
 
-	public int getTurnsLeft(Player player){
-
-	}
+	
 
 	public void setMode(Mode mode){
 		this.mode = mode;

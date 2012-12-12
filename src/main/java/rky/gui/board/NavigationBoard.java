@@ -4,6 +4,7 @@ import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Event;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Label;
@@ -35,6 +36,7 @@ public class NavigationBoard extends Board {
 
 	TextField attributes;
 	TextField candidates;
+	Font font = new Font("Helvetica", Font.BOLD, 16);
 
 	boolean isGameRunning = false;
 	boolean isGameOver = false;
@@ -55,7 +57,6 @@ public class NavigationBoard extends Board {
 		startButton.setImage(startImage);
 		startButton.delegate = applet;
 		applet.addPiece(startButton);
-
 
 		hand = new RigidRectPiece();
 		hand.setBounds(10,250, 90, 30);
@@ -196,7 +197,7 @@ public class NavigationBoard extends Board {
 			applet.setMax_no_attributes(no_of_attributes);
 
 		}catch (Exception e) {}
-		
+
 		try{
 			s = candidates.getText();
 			int no_of_cand = Integer.parseInt(s);
@@ -245,7 +246,15 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void drawOverlay(Graphics g) {
-
+		if(isGameRunning){
+			g.setFont(font);
+			g.setColor(Color.red);
+			g.drawString("Player 1: "+applet.getMaxScore(applet.player1),20,350);
+			if(applet.getMode() == Mode.Mutiplayer){
+				g.setColor(Color.blue);
+				g.drawString("Player 2: "+applet.getMaxScore(applet.player2),20,370);
+			}
+		}
 	}
 
 	@Override

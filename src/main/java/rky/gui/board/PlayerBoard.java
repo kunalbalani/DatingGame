@@ -166,24 +166,23 @@ public class PlayerBoard extends Board {
 	@Override
 	public void pieceClicked(Piece p) {
 
-		if(!isGameOver){
-			if (p == submitButton) {
+		if (p == submitButton) {
 
-				if (currentPlayer.getPlayerName().contains("1")
-						&& applet.getMode() == Mode.Mutiplayer)
-					pushToHistory(ideal, false);
-				else
-					pushToHistory(ideal, true);
+			if (currentPlayer.getPlayerName().contains("1")
+					&& applet.getMode() == Mode.Mutiplayer)
+				pushToHistory(ideal, false);
+			else
+				pushToHistory(ideal, true);
 
-				applet.updatePlayerMove();
-			}
-			if (p == next) {
-				nextButtonClicked();
-			}
-			if (p == prev) {
-				previousButtoClicker();
-			}
+			applet.updatePlayerMove();
 		}
+		if (p == next) {
+			nextButtonClicked();
+		}
+		if (p == prev) {
+			previousButtoClicker();
+		}
+
 	}
 
 	private void previousButtoClicker() {
