@@ -182,6 +182,13 @@ public class PlayerBoard extends Board {
 		if (p == prev) {
 			previousButtoClicker();
 		}
+		
+		for(int i = 0 ; i<ideal.getAttributes().size();i++){
+			Attribute a = ideal.getAttributes().get(i);
+			if( p == a){
+				currentPlayer.selectedAttribute = a;
+			}
+		}
 
 	}
 
@@ -415,6 +422,7 @@ public class PlayerBoard extends Board {
 
 		for (int i = 0; i < size_attributes; i++) {
 			Attribute p = new Attribute();
+			p.delegate = applet;
 			adjustGradient(p, applet.getGameLevel());
 			newCandidate.getAttributes().add(p);
 		}
