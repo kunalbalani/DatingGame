@@ -46,6 +46,7 @@ public class Controller extends GamePlatform
 	boolean isGameRunning = false;
 	boolean isGameOver = false;
 
+	int candidate_counter = 2;
 	public void setup() 
 	{
 		width = getWidth();
@@ -193,17 +194,17 @@ public class Controller extends GamePlatform
 	}
 
 	public double getMaxScore(Player player){
-		
+
 		double retVal = -1;
 		for(int i = 0 ; i <player.getScore().size();i++){
 			if(player.getScore().get(i)> retVal)
 				retVal = player.getScore().get(i);
 		}
-		
+
 		return retVal;
 	}
 
-	
+
 
 	public void setMode(Mode mode){
 		this.mode = mode;
@@ -254,18 +255,25 @@ public class Controller extends GamePlatform
 	}
 
 	public void updateScore(double score){
+
 		if(currentTurn == player1){
+
 			if(mode == Mode.Mutiplayer)
 				player_board.updateScore(score,player2);
 			else
 				player_board.updateScore(score,player1);
 
-			score_board.updateScore(score,Color.blue);
+			score_board.updateScore(score,Color.blue,candidate_counter/2);
 
 		}
 		else{
 			player_board.updateScore(score,player1);
-			score_board.updateScore(score,Color.red);
+			score_board.updateScore(score,Color.red,candidate_counter/2);
+		}
+		if(mode == Mode.Mutiplayer){
+			candidate_counter++;
+		}else{
+			candidate_counter = candidate_counter+2;
 		}
 	}
 

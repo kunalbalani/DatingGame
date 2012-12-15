@@ -114,7 +114,7 @@ public class Piece
 			g.setColor(Color.black);
 			int ascent = g.getFontMetrics(g.getFont()).getAscent();
 			g.drawString(label, (int)(centerX - platform.stringWidth(g, label) / 2),
-					(int)(centerY + ascent / 2));
+					(int)(centerY + ascent/2+100));
 		}
 	}
 

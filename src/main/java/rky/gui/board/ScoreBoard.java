@@ -71,7 +71,7 @@ public class ScoreBoard extends Board {
 
 	}
 
-	private void addNewBar(Line l,double score,Color color){
+	private void addNewBar(Line l,double score,Color color,String label){
 
 		int barX = 500;
 		int barY = l.start.y - 60-yOffset;
@@ -86,18 +86,19 @@ public class ScoreBoard extends Board {
 		RigidRectPiece bar = new RigidRectPiece();
 		bar.setBounds(xOffset+ barX,yOffset+barY, 10, 60);
 		bar.setColor(color);
+		bar.setLabel(label);
 		applet.addPiece(bar);
 
 		bars.add(bar);
 	}
 
-	public void updateScore(double score,Color color){
+	public void updateScore(double score,Color color,int candaidate_id){
 
 		double value = score;
 		score = Math.round( value * 100.0 ) / 100.0;
 
 		if(topScale != null){
-			addNewBar(topScale, score,color);
+			addNewBar(topScale, score,color,candaidate_id+"");
 		}
 	}
 
