@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.012" errors="0" skipped="0" tests="1" name="rky.dating.AppTest">
+<testsuite failures="0" time="0.031" errors="0" skipped="0" tests="1" name="rky.dating.AppTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries"/>
@@ -22,7 +22,7 @@
     <property name="basedir" value="/Users/kunal/Desktop/DatingGame"/>
     <property name="java.endorsed.dirs" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed"/>
     <property name="os.arch" value="x86_64"/>
-    <property name="surefire.real.class.path" value="/Users/kunal/Desktop/DatingGame/target/surefire/surefirebooter5789817202343822890.jar"/>
+    <property name="surefire.real.class.path" value="/Users/kunal/Desktop/DatingGame/target/surefire/surefirebooter6159971051497172045.jar"/>
     <property name="java.io.tmpdir" value="/var/folders/kn/dj1hs2zn3g7bmk43kml03qcm0000gn/T/"/>
     <property name="line.separator" value="
 "/>
@@ -46,7 +46,7 @@
     <property name="java.vm.specification.version" value="1.0"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home"/>
-    <property name="sun.java.command" value="/Users/kunal/Desktop/DatingGame/target/surefire/surefirebooter5789817202343822890.jar /Users/kunal/Desktop/DatingGame/target/surefire/surefire1668386103507318207tmp /Users/kunal/Desktop/DatingGame/target/surefire/surefire7990779941361114221tmp"/>
+    <property name="sun.java.command" value="/Users/kunal/Desktop/DatingGame/target/surefire/surefirebooter6159971051497172045.jar /Users/kunal/Desktop/DatingGame/target/surefire/surefire1572561797155542638tmp /Users/kunal/Desktop/DatingGame/target/surefire/surefire5094426376355812488tmp"/>
     <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
     <property name="user.language" value="en"/>
     <property name="awt.toolkit" value="apple.awt.CToolkit"/>
@@ -65,5 +65,5 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.002" classname="rky.dating.AppTest" name="testApp"/>
+  <testcase time="0.001" classname="rky.dating.AppTest" name="testApp"/>
 </testsuite>

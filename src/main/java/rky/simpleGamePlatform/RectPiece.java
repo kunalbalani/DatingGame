@@ -1,6 +1,5 @@
 package rky.simpleGamePlatform;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
@@ -17,7 +16,7 @@ public class RectPiece extends Piece
 	int yImage;
 	int widthImage;
 	int heightImage;
-	
+
 	public enum DIRECTION {
 		TOP,LEFT,RIGHT,BOTTOM
 	}
@@ -62,8 +61,13 @@ public class RectPiece extends Piece
 	}
 
 
-	boolean mouseDrag(int x, int y) {		 
-		return super.mouseDrag(x, y);
+	boolean mouseDrag(int x, int y) {
+		if(x> 30 && x <280){
+			delegate.setScoreForSelectedAttrbiute((x*100)/250 -10);
+			return super.mouseDrag(x,685);
+		}
+		return false;
+
 	}
 
 	public Piece setX(double x) {

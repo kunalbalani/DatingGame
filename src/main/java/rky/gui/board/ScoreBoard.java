@@ -105,7 +105,15 @@ public class ScoreBoard extends Board {
 	@Override
 	public void stop() 
 	{
-		
+		clearBoard();
+	}
+
+	private void clearBoard()
+	{
+		for(int i =0 ; i< bars.size();i++){
+			bars.get(i).setBounds(0,0,0, 0);
+			applet.removePiece(bars.get(i));
+		}
 	}
 
 	@Override

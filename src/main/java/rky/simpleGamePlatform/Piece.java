@@ -5,6 +5,8 @@ package rky.simpleGamePlatform;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
+import rky.gui.Controller;
+
 
 
 public class Piece
@@ -24,7 +26,7 @@ public class Piece
 	
 	//Using delegation 
 	//need a better way of doing this
-	public GamePlatform delegate;
+	public Controller delegate;
 	
 	//identifier for gaming logic
 	public int tag;
@@ -114,7 +116,7 @@ public class Piece
 			g.setColor(Color.black);
 			int ascent = g.getFontMetrics(g.getFont()).getAscent();
 			g.drawString(label, (int)(centerX - platform.stringWidth(g, label) / 2),
-					(int)(centerY + ascent/2+100));
+					(int)(centerY + ascent / 2)+100);
 		}
 	}
 

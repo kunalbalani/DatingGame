@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Event;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,10 +25,13 @@ public class PlayerBoard extends Board {
 	private final int width = 640, height = 480;
 	private int show_max_guess = 5;
 
-	private Player currentPlayer;
+	public Player currentPlayer;
+	RigidRectPiece hand;
+	boolean isShowingInstruction = false;
 
 	private int noOfAttributes;
 	private int maxNoOfCandidates;
+	int time = 0;
 
 	// private List<Candidate> player_guesses = new ArrayList<Candidate>();
 	// private Attribute selectedAttribute;
@@ -40,13 +42,17 @@ public class PlayerBoard extends Board {
 	private RigidRectPiece submitButton = new RigidRectPiece();
 	private RigidRectPiece next;
 	private RigidRectPiece prev;
+	private RigidRectPiece plus;
+	private RigidRectPiece minus;
+
 	private int offset_for_strings = 0;
 	public int level_offset = 0;
 
+	List<Piece> allPeieces = new ArrayList<Piece>();
+
 	// public int scrolling_index = 0;
 
-	boolean isGameRunning = false;
-	boolean isGameOver = false;
+
 	public boolean isrefreshReqd = true;
 
 	// List<Double> score = new ArrayList<Double>();
@@ -144,6 +150,46 @@ public class PlayerBoard extends Board {
 		this.currentPlayer = player;
 	}
 
+	public void showInstructions()
+	{
+		hand = new RigidRectPiece();
+		hand.setImage(applet.intializeImage("pointer-finger-right.png"));
+		hand.setBorderColor(Color.white);
+		applet.addPiece(hand);
+		allPeieces.add(hand);
+		isShowingInstruction = true;
+	}
+
+	public void hideInstructions(){
+		applet.removePiece(hand);
+		isShowingInstruction = false;
+		showplusandminusButton();
+	}
+
+	private void showplusandminusButton() {
+		plus = new RigidRectPiece();
+		plus.setImage(applet.intializeImage("plus.png"));
+		plus.setBorderColor(Color.white);
+		plus.setBounds(800,350,30,30);
+		plus.delegate = applet;
+		applet.addPiece(plus);
+		allPeieces.add(plus);
+		
+		
+		minus = new RigidRectPiece();
+		minus.setImage(applet.intializeImage("minus.png"));
+		minus.setBorderColor(Color.white);
+		minus.delegate = applet;
+		minus.setBounds(800,400,30,30);
+		applet.addPiece(minus);
+		allPeieces.add(minus);
+	}
+
+	public void showSubmit()
+	{
+
+	}
+
 	@Override
 	public void init() {
 		//init all images add add them
@@ -152,8 +198,6 @@ public class PlayerBoard extends Board {
 			p.setImage(applet.intializeImage(i+""));
 			att_images.add(p);
 		}
-
-
 	}
 
 	private void setIdealCandidate() {
@@ -167,7 +211,7 @@ public class PlayerBoard extends Board {
 	public void pieceClicked(Piece p) {
 
 		if (p == submitButton) {
-
+			
 			if (currentPlayer.getPlayerName().contains("1")
 					&& applet.getMode() == Mode.Mutiplayer)
 				pushToHistory(ideal, false);
@@ -182,14 +226,23 @@ public class PlayerBoard extends Board {
 		if (p == prev) {
 			previousButtoClicker();
 		}
-		
+		if(p == minus){
+			reduceGradient();
+			applet.nav_board.setGuage(currentPlayer.selectedAttribute.getValue());
+		}
+		if(p == plus){
+			increaseGraditent();
+			applet.nav_board.setGuage(currentPlayer.selectedAttribute.getValue());
+		}
+
 		for(int i = 0 ; i<ideal.getAttributes().size();i++){
 			Attribute a = ideal.getAttributes().get(i);
 			if( p == a){
 				currentPlayer.selectedAttribute = a;
+				hideInstructions();
 			}
 		}
-
+		applet.setFocusable(true);
 	}
 
 	private void previousButtoClicker() {
@@ -236,20 +289,26 @@ public class PlayerBoard extends Board {
 	}
 
 	public boolean keyDown(Event e, int key) {
+
 		if (key == 1004) {
+			hideInstructions();
 			selectPrevAttribute();
+			applet.nav_board.setGuage(currentPlayer.selectedAttribute.getValue());
 			return true;
 		} else if (key == 1005) {
+			hideInstructions();
 			selectNextAttribute();
+			applet.nav_board.setGuage(currentPlayer.selectedAttribute.getValue());
 			return true;
 		} else if (key == 1006) {
 			reduceGradient();
+			applet.nav_board.setGuage(currentPlayer.selectedAttribute.getValue());
 			return true;
 		} else if (key == 1007) {
 			increaseGraditent();
+			applet.nav_board.setGuage(currentPlayer.selectedAttribute.getValue());
 			return true;
 		}
-
 		return false;
 	}
 
@@ -283,6 +342,7 @@ public class PlayerBoard extends Board {
 
 	@Override
 	public void update() {
+
 		for (int i = 0; i < ideal.getAttributes().size(); i++) {
 			if (ideal.getAttributes().get(i) == currentPlayer.selectedAttribute) {
 				currentPlayer.selectedAttribute.setBorderColor(Color.red);
@@ -298,6 +358,7 @@ public class PlayerBoard extends Board {
 				next.setColor(Color.gray);
 				next.delegate = applet;
 				applet.addPiece(next);
+				allPeieces.add(next);
 			}
 
 			if (prev == null) {
@@ -306,9 +367,15 @@ public class PlayerBoard extends Board {
 				prev.setColor(Color.gray);
 				prev.delegate = applet;
 				applet.addPiece(prev);
+				allPeieces.add(prev);
+
 			}
 		}
 
+		if(isShowingInstruction && applet.isGameRunning){
+
+			hand.setBounds(800,400+Math.sin(time++/7)*20,90,30);
+		}
 	}
 
 	@Override
@@ -322,7 +389,10 @@ public class PlayerBoard extends Board {
 		g.drawString(currentPlayer.getPlayerName(), offset_x + width / 2 - 90,
 				offset_y + 20);
 
-		if (isGameRunning) {
+		
+		
+		if (applet.isGameRunning) {
+			
 			g.setFont(font);
 			g.setColor(Color.black);
 			g.drawString("Submit", offset_x + 510 + 20, offset_y + 80 + 20);
@@ -340,11 +410,11 @@ public class PlayerBoard extends Board {
 			if (offset_for_strings != 0) {
 
 				for (int i = 0; i < noOfAttributes; i++) {
-					//g.setFont(font);
-					//g.setColor(Color.black);
+
 					if(!pieceadded.contains(att_images.get(i))){
 						applet.addPiece(att_images.get(i));
 						pieceadded.add(att_images.get(i));
+						allPeieces.add(att_images.get(i));
 						att_images.get(i).setImage(applet.intializeImage((i+1)+".png"));
 					}
 					if(applet.getGameLevel() == Level.Easy){
@@ -352,10 +422,6 @@ public class PlayerBoard extends Board {
 					}else{
 						att_images.get(i).setBounds(offset_for_strings + 15,1.3*offset_y +(i) * (attribute_display_height + padding), attribute_display_height, attribute_display_height);
 					}
-					//					
-					//g.drawString("A" + (i + 1), offset_for_strings + 15,
-					//							offset_y + i * (attribute_display_height + padding)
-					//									+ border + padding * 7);
 				}
 
 				int startIndex = 0;
@@ -397,6 +463,15 @@ public class PlayerBoard extends Board {
 			}
 		}
 
+		if(isShowingInstruction){
+
+			g.setFont(new Font("Helvetica", Font.BOLD, 13));
+			g.setColor(Color.black);
+			g.drawString("use arrow keys",800,500);
+			g.drawString("or mouse",800,520);
+			g.drawString("to change selection",800,540);
+
+		}
 	}
 
 	public void pushToHistory(Candidate c, boolean isRefreshRequired) {
@@ -450,6 +525,7 @@ public class PlayerBoard extends Board {
 						attribute_display_height);
 				p.setColor(p.getColor());
 				applet.addPiece(p);
+				allPeieces.add(p);
 			}
 		} else {
 
@@ -467,17 +543,27 @@ public class PlayerBoard extends Board {
 				grid.setBounds(x - 20, y - 5, width + 40, height + 10);
 				grid.setColor(Color.white);
 				applet.addPiece(grid);
+				allPeieces.add(grid);
 
 				p.setBounds(x, y, width, height);
 				p.setColor(p.getColor());
 				applet.addPiece(p);
+				allPeieces.add(p);
+
 			}
 		}
 	}
 
 	@Override
 	public void stop() {
-		isGameOver = true;
+		claearBoard();
+	}
+
+	private void claearBoard() {
+		for(int i=0;i<allPeieces.size();i++){
+			allPeieces.get(i).setBounds(0, 0, 0, 0);
+			applet.removePiece(allPeieces.get(i));
+		}
 	}
 
 	@Override
@@ -493,6 +579,7 @@ public class PlayerBoard extends Board {
 		submitButton.setColor(Color.red);
 		submitButton.delegate = applet;
 		applet.addPiece(submitButton);
+		allPeieces.add(submitButton);
 
 		if(applet.getGameLevel() == Level.Hard)
 			level_offset = 40;
@@ -500,13 +587,14 @@ public class PlayerBoard extends Board {
 		if(applet.getGameLevel() == Level.Easy){
 			show_max_guess = 4;
 		}
+		applet.isGameRunning = true;
 
-
-		isGameRunning = true;
+		showInstructions();
 	}
 
 	public void updateScore(double score, Player player) {
 		player.getScore().add(score);
+
 	}
 
 	public void setPlayer(Player player) {

@@ -150,7 +150,7 @@ public class Dating
 		informPlayer( Player.Role.M, "GAMEOVER " + finalScore + " " + turnsUsed );
 		informPlayer( Player.Role.P, "GAMEOVER " + finalScore + " " + turnsUsed );
 		if(applet !=null){
-			applet.stopGame();
+			applet.displayGameOver();
 		}
 
 	}

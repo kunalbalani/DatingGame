@@ -13,12 +13,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import rky.gui.Controller;
 import rky.simpleGamePlatform.Piece;
+import rky.simpleGamePlatform.RectPiece;
 import rky.simpleGamePlatform.RigidRectPiece;
 
 public class NavigationBoard extends Board {
@@ -28,19 +32,18 @@ public class NavigationBoard extends Board {
 
 	RigidRectPiece startButton,stopButton;
 	RigidRectPiece hand;
+	RectPiece  pointer;
 	int time=0;
 
 	CheckboxGroup mode_radio_button;
 	CheckboxGroup level_radio_button;
-
+	List<Checkbox> allBoxes = new ArrayList<Checkbox>();
 
 	TextField attributes;
 	TextField candidates;
 	Font font = new Font("Helvetica", Font.BOLD, 16);
 
-	boolean isGameRunning = false;
-	boolean isGameOver = false;
-
+	Label error = new Label();
 
 	public NavigationBoard(Controller applet)
 	{
@@ -67,6 +70,37 @@ public class NavigationBoard extends Board {
 		addModeCheckBox();
 		addLevelOptions();
 		addAttributesTF();
+		addGuage();
+	}
+
+	private void addGuage() {
+		int startOffsetx = 20;
+		int startOffsety =	620;
+		int allbarsheight = 30;
+		
+		for(int i =0 ; i<255;i++){
+			
+			RigidRectPiece p = new RigidRectPiece();
+			p.setBorderColor(Color.white);
+			p.setBounds(startOffsetx+i,startOffsety, 1, allbarsheight);
+			p.setBorderColor(new Color(i,255-i,255-i));
+			applet.addPiece(p);
+			
+		}
+		setGuage(0);
+	}
+	
+	public void setGuage(double score){
+		
+		if(pointer == null){
+			pointer = new RectPiece();
+			pointer.setBorderColor(Color.white);
+			pointer.delegate = applet;
+			pointer.setImage(applet.intializeImage("pointer-finger-Up.png"));
+			applet.addPiece(pointer);
+		}
+		double pointAt = score*2.5;
+		pointer.setBounds(pointAt+10,665,40,40);
 	}
 
 	private void addAttributesTF() 
@@ -91,6 +125,15 @@ public class NavigationBoard extends Board {
 		can_label.setSize(100, 20);
 		can_label.setBackground(Color.white);
 		applet.add(can_label);
+
+
+		error = new Label("*Must be > 0");
+		error.setLocation(170,210);
+		error.setSize(100, 20);
+		error.setBackground(Color.white);
+		error.setForeground(Color.red);
+		error.setVisible(false);
+		applet.add(error);
 
 		candidates = new TextField(2);
 		candidates.setLocation(110,210);
@@ -134,9 +177,6 @@ public class NavigationBoard extends Board {
 			}
 		};
 
-
-
-
 		for(int i=0;i<3;i++){
 
 			String level = "";
@@ -156,6 +196,7 @@ public class NavigationBoard extends Board {
 			}
 			leve.addFocusListener(changeListener);
 			leve.setBackground(Color.white);
+			allBoxes.add(leve);
 			applet.add(leve);
 
 			startPosition+=20;
@@ -178,12 +219,14 @@ public class NavigationBoard extends Board {
 		mode1.setSize(120, 20);
 		mode1.setState(true);
 		mode1.setBackground(Color.white);
+		allBoxes.add(mode1);
 		applet.add(mode1);
 
 		Checkbox mode2 = new Checkbox("Two Players",mode_radio_button,false);
 		mode2.setLocation(100, 40);
 		mode2.setSize(120, 20);
 		mode2.setBackground(Color.white);
+		allBoxes.add(mode2);
 		applet.add(mode2);		
 
 	}
@@ -241,54 +284,98 @@ public class NavigationBoard extends Board {
 
 	@Override
 	public void stop() {
-		isGameOver = true;
+
+		sw = new StopWatch();
+		
+		startButton.setBounds(0,0, 0, 0);
+		applet.removePiece(startButton);
+		applet.removePiece(pointer);
+		
+
+		candidates.setEnabled(true);
+
+		//diable all checkboxes
+		for(int i =0 ;i <allBoxes.size();i++){
+			allBoxes.get(i).setEnabled(true);
+			applet.remove(allBoxes.get(i));
+		}
+		
+		applet.remove(candidates);
+		applet.remove(attributes);
 	}
 
 	@Override
 	public void drawOverlay(Graphics g) {
-		if(isGameRunning){
-			g.setFont(font);
-			g.setColor(Color.red);
-			g.drawString("Player 1: "+applet.getMaxScore(applet.player1),20,350);
-			if(applet.getMode() == Mode.Mutiplayer){
-				g.setColor(Color.blue);
-				g.drawString("Player 2: "+applet.getMaxScore(applet.player2),20,370);
-			}
+		
+		g.setFont(font);
+		g.setColor(Color.red);
+		g.drawString("Player 1: "+applet.getMaxScore(applet.player1),20,350);
+		if(applet.getMode() == Mode.Mutiplayer){
+			g.setColor(Color.blue);
+			g.drawString("Player 2: "+applet.getMaxScore(applet.player2),20,370);
 		}
+
+		g.setFont(new Font("Helvetica", Font.BOLD, 20));
+		g.setColor(Color.black);
+		g.drawString("Elapsed time:", 30, 525);
+		g.drawString(getTime(sw.getElapsedTime()), 30, 550);
+		
+		//score board
+		g.setFont(font);
+		g.setColor(Color.black);
+		g.drawString("Gradient Meter ", 30, 610);
+		g.drawString("0", 20, 670);
+		g.drawString("0.5", (145), 670);
+		g.drawString("1", 270, 670);
+
 	}
 
 	@Override
-	public void update() {
+	public void update() 
+	{
 		hand.setBounds(20+Math.sin(time++)*5,270, 100, 45);
 	}	
 
 	@Override
 	public void pieceClicked(Piece p) {
-		if(!isGameRunning){
-			if(p == startButton){
+		if(p == startButton){
+
+			if(!applet.isGameRunning){
+
 				setAppletState();
-				if(isValid())
+				if(isValid()){
 					applet.startGame();
+					error.setVisible(false);
+				}
 				else{
 					showError();
 				}
+
+			}else{
+				applet.stopGame();
 			}
-		}else{
-			applet.stopGame();
 		}
+
 	}
 
 	private void showError() {
-
+		error.setVisible(true);
 	}
 
 	private boolean isValid() {
-		return true;
+		try{
+			if(Integer.parseInt(candidates.getText()) > 0){
+				return true;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override
 	public void start() {
-		//TODO disable all radio button
+		
 		sw.start();
 
 		applet.removePiece(hand);
@@ -297,6 +384,21 @@ public class NavigationBoard extends Board {
 		startButton.setImage(applet.intializeImage("restart_button.png"));
 
 		candidates.setEnabled(false);
-		isGameRunning = true;
+
+		//diable all checkboxes
+		for(int i =0 ;i <allBoxes.size();i++){
+			allBoxes.get(i).setEnabled(false);
+		}
+		applet.isGameRunning = true;
+	}
+
+	private String getTime(long millis){
+
+		return String.format("%d min, %d sec", 
+				TimeUnit.MILLISECONDS.toMinutes(millis),
+				TimeUnit.MILLISECONDS.toSeconds(millis) - 
+				TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+		);
+
 	}
 }

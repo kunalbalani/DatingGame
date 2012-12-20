@@ -19,7 +19,9 @@ public class Attribute extends RigidRectPiece
 		return returnValue;
 	}
 		
-	public class Material{
+	public class Material
+	{
+		
 		Color colorScheme;
 		int red = 0 , blue= 255,green = 255;
 		int step = 8;
@@ -35,6 +37,17 @@ public class Attribute extends RigidRectPiece
 
 		public  void setStep(int newStep){
 			step = newStep;
+		}
+		
+		public void setValue(double colorValue)
+		{
+			if(colorValue > 0 && colorValue < 256){
+				red = (int) colorValue;
+				blue = (int)(255 - colorValue);
+				green = (int)(255 - colorValue);
+				colorScheme = new Color(red,blue,green);
+				Attribute.this.setColor(colorScheme);
+			}
 		}
 
 		public  void increaseGradient(){
